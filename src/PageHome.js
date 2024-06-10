@@ -77,6 +77,7 @@ export const PageHome = () => {
     if (error) {
         return <div>{error}</div>;
     }
+    // -> {(1000 * coupon.totalOdds).toLocaleString('tr-TR', {currency: 'TRY', style: 'currency', currencyDisplay: 'code'}).replace('TRY', '')}
     return (
         <div style={{display: 'flex', justifyContent: 'center', fontFamily: 'monospace', fontSize: '11px', overflowY: 'auto', height: '100vh'}}>
             <div style={{width: '100%', maxWidth: '800px'}}>
@@ -113,8 +114,8 @@ export const PageHome = () => {
                                 justifyContent : 'space-between',
                                 alignItems     : 'center'
                             }}>
-                            <div style={{marginRight: 'auto'}}>Coupon ID: {coupon.couponId.toUpperCase()}</div>
-                            <div style={{textAlign: 'right', marginRight: '10px'}}>{moment(coupon.created_at).format('YYYY-MM-DD H:mm')}</div>
+                            <div style={{marginRight: 'auto'}}>{coupon.couponId.toUpperCase()}</div>
+                            <div style={{textAlign: 'right', marginRight: '10px'}}></div>
                             <div style={{width: '40px', textAlign: 'center', backgroundColor: COLOR_PRIMARY, color: 'white', borderRadius: '5px', padding: '2px 2px', margin: '0 2px'}}>{coupon.totalOdds}</div>
                         </div>
                         {coupon.showDetails && (
@@ -131,7 +132,7 @@ export const PageHome = () => {
                                                 justifyContent: 'space-between',
                                                 alignItems    : 'center'
                                             }}>
-                                            <div style={{marginRight: 'auto'}}>{match.eventName}</div>
+                                            <div style={{marginRight: 'auto', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: '200px'}}>{match.eventName}</div>
                                             <div style={{width: '125px', textAlign: 'center', display: ''}} className="hide-mobile">{formatDate(match.eventDate)}</div>
                                             <div style={{width: '40px', textAlign: 'center'}}>{match.score}</div>
                                             <div style={{

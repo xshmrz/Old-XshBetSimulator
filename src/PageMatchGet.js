@@ -75,7 +75,7 @@ export const PageMatchGet = () => {
                                    console.log('Coupon successfully created:', couponId);
                                    coupon.forEach(match => {
                                        modelMatch.Create({
-                                                             data           : {...match, couponId: couponId, status: 'Pending', score: '- / -'},
+                                                             data: {...match, couponId: couponId, status: 'Pending', score: '-/-'},
                                                              callBackSuccess: function () {
                                                                  console.log('Match successfully created:', match.eventId, 'Coupon ID:', couponId);
                                                              },
