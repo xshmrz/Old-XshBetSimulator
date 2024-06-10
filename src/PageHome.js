@@ -25,6 +25,7 @@ export const PageHome = () => {
      */
     const fetchCoupons  = () => {
         modelCoupon.GetAll({
+                               orderParams: [{field: 'created_at', direction: 'desc'}],
                                callBackSuccess: async (couponData) => {
                                    const enrichedCoupons = await Promise.all(
                                        couponData.map(async (coupon) => {
@@ -113,7 +114,7 @@ export const PageHome = () => {
                                 alignItems     : 'center'
                             }}>
                             <div style={{marginRight: 'auto'}}>Coupon ID: {coupon.couponId.toUpperCase()}</div>
-                            <div style={{textAlign: 'right', marginRight: '10px'}}></div>
+                            <div style={{textAlign: 'right', marginRight: '10px'}}>{coupon.created_at}</div>
                             <div style={{width: '40px', textAlign: 'center', backgroundColor: COLOR_PRIMARY, color: 'white', borderRadius: '5px', padding: '2px 2px', margin: '0 2px'}}>{coupon.totalOdds}</div>
                         </div>
                         {coupon.showDetails && (
