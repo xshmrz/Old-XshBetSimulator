@@ -1,11 +1,16 @@
 import React, {useEffect} from 'react';
 import {Model}            from './Model';
-import data               from './data.json';
 import moment             from 'moment/moment';
-const API_URL_CHECK         = 'https://statistics.iddaa.com/broadage/getEventListCache?SportId=1&SearchDate=';
 const modelCoupon           = new Model('coupon');
 const modelMatch            = new Model('match');
+const API_URL_CHECK         = process.env.REACT_APP_API_URL_CHECK;
+/**
+ * PageMatchCheck component to check match results and update the database.
+ */
 export const PageMatchCheck = () => {
+    /**
+     * Fetch match data from the API and update the database.
+     */
     const fetchData = () => {
         fetch(API_URL_CHECK + moment().format('YYYY-MM-DD'))
             .then(response => response.json())
@@ -125,6 +130,7 @@ export const PageMatchCheck = () => {
                                   });
             });
     };
+    // Fetch data on component mount
     useEffect(() => {
         fetchData();
     }, []);

@@ -1,13 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import {Model}                      from './Model';
-const COLOR_PRIMARY   = '#007BFF';
-const COLOR_SUCCESS   = '#28A745';
-const COLOR_DANGER    = '#DC3545';
-const COLOR_WARNING   = '#8C6600';
-const COLOR_LIGHT     = '#D9E1EC';
-const COLOR_DARK      = '#343A40';
+const COLOR_PRIMARY   = process.env.REACT_APP_COLOR_PRIMARY;
+const COLOR_SUCCESS   = process.env.REACT_APP_COLOR_SUCCESS;
+const COLOR_DANGER    = process.env.REACT_APP_COLOR_DANGER;
+const COLOR_WARNING   = process.env.REACT_APP_COLOR_WARNING;
+const COLOR_LIGHT     = process.env.REACT_APP_COLOR_LIGHT;
+const COLOR_DARK      = process.env.REACT_APP_COLOR_DARK;
 const modelCoupon     = new Model('coupon');
 const modelMatch      = new Model('match');
+/**
+ * PageHome component to display the list of coupons and their details.
+ */
 export const PageHome = () => {
     const [coupons, setCoupons]             = useState([]);
     const [error, setError]                 = useState(null);
@@ -15,9 +18,13 @@ export const PageHome = () => {
     const [totalEarnings, setTotalEarnings] = useState(0);
     const [totalProfit, setTotalProfit]     = useState(0);
     const [activeIndex, setActiveIndex]     = useState(null);
+    // Fetch coupons on component mount
     useEffect(() => {
         fetchCoupons();
     }, []);
+    /**
+     * Fetch all coupons from the database and calculate totals.
+     */
     const fetchCoupons    = () => {
         modelCoupon.GetAll({
                                callBackSuccess: async (couponData) => {
@@ -47,6 +54,10 @@ export const PageHome = () => {
                                }
                            });
     };
+    /**
+     * Calculate the total spent, earnings, and profit from the coupons.
+     * @param {Array} coupons - List of coupons.
+     */
     const calculateTotals = (coupons) => {
         const totalSpent    = (coupons.length * 1000).toFixed(2);
         const totalEarnings = coupons.reduce((acc, coupon) => acc + 1000 * parseFloat(coupon.totalOdds), 0).toFixed(2);
@@ -55,6 +66,10 @@ export const PageHome = () => {
         setTotalEarnings(totalEarnings);
         setTotalProfit(totalProfit);
     };
+    /**
+     * Toggle the visibility of coupon details.
+     * @param {number} index - Index of the coupon to toggle.
+     */
     const toggleDetails   = (index) => {
         setActiveIndex(activeIndex === index ? null : index);
         setCoupons((prevCoupons) =>
@@ -64,6 +79,11 @@ export const PageHome = () => {
                        }))
         );
     };
+    /**
+     * Format a date string to 'tr-TR' locale.
+     * @param {string} dateString - Date string to format.
+     * @returns {string} - Formatted date string.
+     */
     const formatDate      = (dateString) => {
         const options = {year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'};
         return new Date(dateString).toLocaleDateString('tr-TR', options);
