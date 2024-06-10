@@ -50,13 +50,6 @@ Bu projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları tak
     REACT_APP_FIREBASE_APP_ID=your-firebase-app-id
 
     REACT_APP_MATCHES_PER_COUPON=4
-
-    REACT_APP_COLOR_PRIMARY=#007BFF
-    REACT_APP_COLOR_SUCCESS=#28A745
-    REACT_APP_COLOR_DANGER=#DC3545
-    REACT_APP_COLOR_WARNING=#8C6600
-    REACT_APP_COLOR_LIGHT=#D9E1EC
-    REACT_APP_COLOR_DARK=#343A40
     ```
 
 4. **Uygulamayı Başlatın:**
@@ -79,17 +72,6 @@ Firebase kullanarak projeyi dağıtmak için:
 ```bash
 firebase deploy
 ```
-
-## Proje Yapısı
-
-| Dosya               | Açıklama                                                |
-|---------------------|---------------------------------------------------------|
-| `index.js`          | Uygulamanın ana giriş noktası, yönlendirmeyi ayarlar.   |
-| `Model.js`          | Firebase veritabanı işlemlerini yönetir.                |
-| `PageHome.js`       | Kuponları gösterir ve kar/zarar hesaplar.               |
-| `PageMatchGet.js`   | Maç verilerini çeker ve kuponlar oluşturur.             |
-| `PageMatchCheck.js` | Maç sonuçlarını kontrol eder ve veritabanını günceller. |
-| `PageLayout.js`     | Sayfalar için düzen bileşeni.                           |
 
 ## Lisans
 
