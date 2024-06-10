@@ -18,14 +18,6 @@ Sorularınız için: [xshmrz@gmail.com](mailto:xshmrz@gmail.com)
 
 Bu projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları takip edin.
 
-### Gereksinimler
-
-| Gereksinim                 | Açıklama                       |
-|----------------------------|--------------------------------|
-| Node.js                    | Node.js ortamı                 |
-| npm (Node Package Manager) | Node.js paket yöneticisi       |
-| Firebase hesabı            | Firebase projesi oluşturulmalı |
-
 ### Kurulum
 
 1. **Depoyu Klonlayın:**
