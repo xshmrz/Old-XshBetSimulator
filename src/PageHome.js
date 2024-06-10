@@ -26,10 +26,6 @@ export const PageHome = () => {
     const fetchCoupons  = () => {
         modelCoupon.GetAll({
                                callBackSuccess: async (couponData) => {
-
-
-
-
                                    const enrichedCoupons = await Promise.all(
                                        couponData.map(async (coupon) => {
                                            return new Promise((resolve, reject) => {
@@ -93,7 +89,10 @@ export const PageHome = () => {
                         justifyContent : 'space-between',
                         alignItems     : 'center'
                     }}>
-                    <div>App Name</div>
+                    <div>Xsh Bet Simulator</div>
+                </div>
+                <div>
+                    <div><img src={require('./image-header.webp')} style={{width: '100%', height: '200px', objectFit: 'cover', marginBottom: '10px', borderRadius: '5px'}}/></div>
                 </div>
                 {coupons.map((coupon, index) => (
                     <div

@@ -1,6 +1,6 @@
 # Ultimate Bet Simulator
 
-<img src="image-header.webp" style="width: 1920px; height: 300px;object-fit:cover; border-radius: 5px" alt="">
+<img src="src/image-header.webp" style="width: 1920px; height: 300px;object-fit:cover; border-radius: 5px" alt="">
 
 ## Proje Genel Bakış
 

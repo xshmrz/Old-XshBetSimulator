@@ -1,6 +1,5 @@
 import {initializeApp}                                                                                                           from 'firebase/app';
 import {getFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, query, where, writeBatch, orderBy, setDoc} from 'firebase/firestore';
-
 // Firebase configuration object
 const firebaseConfig = {
     apiKey           : process.env.REACT_APP_FIREBASE_API_KEY,
@@ -11,11 +10,9 @@ const firebaseConfig = {
     messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
     appId            : process.env.REACT_APP_FIREBASE_APP_ID
 };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
-
 /**
  * Model class to interact with Firebase Firestore.
  * Provides methods to perform CRUD operations on a specified collection.
@@ -24,7 +21,6 @@ export class Model {
     constructor(collectionName) {
         this.collectionRef = collection(db, collectionName);
     }
-
     /**
      * Fetch a single document by its ID.
      * @param {Object} params - Parameters for fetching the document.
@@ -38,14 +34,15 @@ export class Model {
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 callBackSuccess(docSnap.data());
-            } else {
+            }
+            else {
                 callBackError('No such document!');
             }
-        } catch (error) {
+        }
+        catch (error) {
             callBackError(error);
         }
     }
-
     /**
      * Fetch all documents in the collection, optionally filtered by query parameters.
      * @param {Object} params - Parameters for fetching the documents.
@@ -71,11 +68,11 @@ export class Model {
                 results.push({id: doc.id, ...doc.data()});
             });
             callBackSuccess(results);
-        } catch (error) {
+        }
+        catch (error) {
             callBackError(error);
         }
     }
-
     /**
      * Create a new document in the collection.
      * @param {Object} params - Parameters for creating the document.
@@ -88,11 +85,11 @@ export class Model {
             const newDocRef = doc(this.collectionRef);
             await setDoc(newDocRef, data);
             callBackSuccess(newDocRef.id);
-        } catch (error) {
+        }
+        catch (error) {
             callBackError(error);
         }
     }
-
     /**
      * Update an existing document in the collection by its ID.
      * @param {Object} params - Parameters for updating the document.
@@ -106,11 +103,11 @@ export class Model {
             const docRef = doc(this.collectionRef, id);
             await updateDoc(docRef, data);
             callBackSuccess();
-        } catch (error) {
+        }
+        catch (error) {
             callBackError(error);
         }
     }
-
     /**
      * Delete a document from the collection by its ID.
      * @param {Object} params - Parameters for deleting the document.
@@ -123,11 +120,11 @@ export class Model {
             const docRef = doc(this.collectionRef, id);
             await deleteDoc(docRef);
             callBackSuccess();
-        } catch (error) {
+        }
+        catch (error) {
             callBackError(error);
         }
     }
-
     /**
      * Delete all documents from the collection.
      * @param {Object} params - Parameters for deleting all documents.
@@ -143,11 +140,11 @@ export class Model {
             });
             await batch.commit();
             callBackSuccess();
-        } catch (error) {
+        }
+        catch (error) {
             callBackError(error);
         }
     }
-
     /**
      * Update all documents that match the query parameters.
      * @param {Object} params - Parameters for updating the documents.
@@ -170,7 +167,8 @@ export class Model {
             });
             await batch.commit();
             callBackSuccess();
-        } catch (error) {
+        }
+        catch (error) {
             callBackError(error);
         }
     }
