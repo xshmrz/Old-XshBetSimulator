@@ -106,8 +106,3 @@ firebase deploy
 ## Lisans
 
 Bu proje MIT Lisansı ile lisanslanmıştır - ayrıntılar için [LICENSE](LICENSE) dosyasına bakın.
-
----
-
-Sevgiyle yapıldı ❤️
-
