@@ -1,10 +1,10 @@
-# Ultimate Bet Simulator
+# Xsh Bet Simulator
 
-<img src="src/image-header.webp" style="width: 1920px; height: 300px;object-fit:cover; border-radius: 5px" alt="">
+<img src="./src/image-header.webp" style="width: 1920px; height: 300px;object-fit:cover; border-radius: 5px" alt="">
 
 ## Proje Genel Bakış
 
-**Ultimate Bet Simulator**, API'den maç verilerini çekerek 4 maçlık kuponlar oluşturur, her kupona 1000 TL yatırır ve
+**Xsh Bet Simulator**, API'den maç verilerini çekerek 4 maçlık kuponlar oluşturur, her kupona 1000 TL yatırır ve
 kar/zarar simülasyonu yapar. Bu uygulama, bahis dünyasına dair analiz yapmanıza ve stratejilerinizi test etmenize olanak
 tanır.
 
@@ -22,17 +22,19 @@ Bu projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları tak
 
 ### Gereksinimler
 
-- Node.js
-- npm (Node Package Manager)
-- Firebase hesabı
+| Gereksinim                 | Açıklama                       |
+|----------------------------|--------------------------------|
+| Node.js                    | Node.js ortamı                 |
+| npm (Node Package Manager) | Node.js paket yöneticisi       |
+| Firebase hesabı            | Firebase projesi oluşturulmalı |
 
 ### Kurulum
 
 1. **Depoyu Klonlayın:**
 
     ```bash
-    git clone https://github.com/yourusername/ultimate-bet-simulator.git
-    cd ultimate-bet-simulator
+    git clone https://github.com/xshmrz/xsh-bet-simulator.git
+    cd xsh-bet-simulator
     ```
 
 2. **Bağımlılıkları Yükleyin:**
@@ -90,18 +92,33 @@ firebase deploy
 
 ## Proje Yapısı
 
-- **`index.js`**: Uygulamanın ana giriş noktası, yönlendirmeyi ayarlar.
-- **`Model.js`**: Firebase veritabanı işlemlerini yönetir.
-- **`PageHome.js`**: Kuponları gösterir ve kar/zarar hesaplar.
-- **`PageMatchGet.js`**: Maç verilerini çeker ve kuponlar oluşturur.
-- **`PageMatchCheck.js`**: Maç sonuçlarını kontrol eder ve veritabanını günceller.
-- **`PageLayout.js`**: Sayfalar için düzen bileşeni.
+| Dosya               | Açıklama                                                |
+|---------------------|---------------------------------------------------------|
+| `index.js`          | Uygulamanın ana giriş noktası, yönlendirmeyi ayarlar.   |
+| `Model.js`          | Firebase veritabanı işlemlerini yönetir.                |
+| `PageHome.js`       | Kuponları gösterir ve kar/zarar hesaplar.               |
+| `PageMatchGet.js`   | Maç verilerini çeker ve kuponlar oluşturur.             |
+| `PageMatchCheck.js` | Maç sonuçlarını kontrol eder ve veritabanını günceller. |
+| `PageLayout.js`     | Sayfalar için düzen bileşeni.                           |
 
 ## Simülasyon Detayları
 
-- **Her Kupon:** 4 maç içerir.
-- **Bahis Miktarı:** Her kupona 1000 TL.
-- **Kar/Zarar Hesaplama:** Her kupondaki maçların oranlarına dayanarak yapılır.
+| Özellik                 | Açıklama                                             |
+|-------------------------|------------------------------------------------------|
+| **Her Kupon**           | 4 maç içerir.                                        |
+| **Bahis Miktarı**       | Her kupona 1000 TL.                                  |
+| **Kar/Zarar Hesaplama** | Her kupondaki maçların oranlarına dayanarak yapılır. |
+
+## Renkler ve Stil
+
+| Renk Tipi         | Hex Değeri |
+|-------------------|------------|
+| **Birincil Renk** | #007BFF    |
+| **Başarı Rengi**  | #28A745    |
+| **Tehlike Rengi** | #DC3545    |
+| **Uyarı Rengi**   | #8C6600    |
+| **Açık Renk**     | #D9E1EC    |
+| **Koyu Renk**     | #343A40    |
 
 ## Lisans
 
