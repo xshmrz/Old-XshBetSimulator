@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Model}                      from './Model';
+import moment                       from 'moment/moment';
 const COLOR_PRIMARY   = process.env.REACT_APP_COLOR_PRIMARY;
 const COLOR_SUCCESS   = process.env.REACT_APP_COLOR_SUCCESS;
 const COLOR_DANGER    = process.env.REACT_APP_COLOR_DANGER;
@@ -12,22 +13,25 @@ const modelMatch      = new Model('match');
  * PageHome component to display the list of coupons and their details.
  */
 export const PageHome = () => {
-    const [coupons, setCoupons]             = useState([]);
-    const [error, setError]                 = useState(null);
-    const [totalSpent, setTotalSpent]       = useState(0);
-    const [totalEarnings, setTotalEarnings] = useState(0);
-    const [totalProfit, setTotalProfit]     = useState(0);
-    const [activeIndex, setActiveIndex]     = useState(null);
+    const [coupons, setCoupons]         = useState([]);
+    const [error, setError]             = useState(null);
+    const [activeIndex, setActiveIndex] = useState(null);
     // Fetch coupons on component mount
     useEffect(() => {
         fetchCoupons();
     }, []);
     /**
-     * Fetch all coupons from the database and calculate totals.
+     * Fetch all coupons from the database.
      */
-    const fetchCoupons    = () => {
+    const fetchCoupons  = () => {
         modelCoupon.GetAll({
                                callBackSuccess: async (couponData) => {
+
+                                   couponData.forEach(function (value) {
+                                       modelCoupon.Update({id: value.id,data:{created_at : moment().format("YYYY-MM-DD HH:ii")}})
+                                   })
+
+
                                    const enrichedCoupons = await Promise.all(
                                        couponData.map(async (coupon) => {
                                            return new Promise((resolve, reject) => {
@@ -46,7 +50,6 @@ export const PageHome = () => {
                                        })
                                    );
                                    setCoupons(enrichedCoupons);
-                                   calculateTotals(enrichedCoupons);
                                },
                                callBackError  : (error) => {
                                    console.error('Error fetching coupon data:', error);
@@ -55,22 +58,10 @@ export const PageHome = () => {
                            });
     };
     /**
-     * Calculate the total spent, earnings, and profit from the coupons.
-     * @param {Array} coupons - List of coupons.
-     */
-    const calculateTotals = (coupons) => {
-        const totalSpent    = (coupons.length * 1000).toFixed(2);
-        const totalEarnings = coupons.reduce((acc, coupon) => acc + 1000 * parseFloat(coupon.totalOdds), 0).toFixed(2);
-        const totalProfit   = (totalEarnings - totalSpent).toFixed(2);
-        setTotalSpent(totalSpent);
-        setTotalEarnings(totalEarnings);
-        setTotalProfit(totalProfit);
-    };
-    /**
      * Toggle the visibility of coupon details.
      * @param {number} index - Index of the coupon to toggle.
      */
-    const toggleDetails   = (index) => {
+    const toggleDetails = (index) => {
         setActiveIndex(activeIndex === index ? null : index);
         setCoupons((prevCoupons) =>
                        prevCoupons.map((coupon, i) => ({
@@ -84,7 +75,7 @@ export const PageHome = () => {
      * @param {string} dateString - Date string to format.
      * @returns {string} - Formatted date string.
      */
-    const formatDate      = (dateString) => {
+    const formatDate    = (dateString) => {
         const options = {year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'};
         return new Date(dateString).toLocaleDateString('tr-TR', options);
     };
@@ -92,8 +83,8 @@ export const PageHome = () => {
         return <div>{error}</div>;
     }
     return (
-        <div style={{display: 'flex', justifyContent: 'center', fontFamily: 'monospace', fontSize: '12px'}}>
-            <div style={{width: '800px'}}>
+        <div style={{display: 'flex', justifyContent: 'center', fontFamily: 'monospace', fontSize: '11px', overflowY: 'auto', height: '100vh'}}>
+            <div style={{width: '100%', maxWidth: '800px'}}>
                 <div
                     style={{
                         padding        : '20px 10px',
@@ -105,7 +96,6 @@ export const PageHome = () => {
                         alignItems     : 'center'
                     }}>
                     <div>App Name</div>
-                    <div>{totalSpent} / {totalEarnings} / {totalProfit}</div>
                 </div>
                 {coupons.map((coupon, index) => (
                     <div
@@ -125,9 +115,9 @@ export const PageHome = () => {
                                 justifyContent : 'space-between',
                                 alignItems     : 'center'
                             }}>
-                            <div style={{marginRight: 'auto'}}>Coupon ID: {coupon.couponId}</div>
-                            <div style={{textAlign: 'right', marginRight: '10px'}}>{(coupon.totalOdds * 1000).toFixed(2)} TL</div>
-                            <div style={{width: '75px', textAlign: 'center', backgroundColor: COLOR_PRIMARY, color: 'white', borderRadius: '5px', padding: '2px 2px', margin: '0 2px'}}>{coupon.totalOdds}</div>
+                            <div style={{marginRight: 'auto'}}>Coupon ID: {coupon.couponId.toUpperCase()}</div>
+                            <div style={{textAlign: 'right', marginRight: '10px'}}></div>
+                            <div style={{width: '40px', textAlign: 'center', backgroundColor: COLOR_PRIMARY, color: 'white', borderRadius: '5px', padding: '2px 2px', margin: '0 2px'}}>{coupon.totalOdds}</div>
                         </div>
                         {coupon.showDetails && (
                             <div style={{backgroundColor: '#FFFFFF', borderTop: `1px solid ${COLOR_DARK}`}}>
@@ -144,30 +134,21 @@ export const PageHome = () => {
                                                 alignItems    : 'center'
                                             }}>
                                             <div style={{marginRight: 'auto'}}>{match.eventName}</div>
-                                            <div style={{width: '125px', textAlign: 'center'}}>{formatDate(match.eventDate)}</div>
-                                            <div style={{width: '75px', textAlign: 'center'}}>{match.score}</div>
+                                            <div style={{width: '125px', textAlign: 'center', display: ''}} className="hide-mobile">{formatDate(match.eventDate)}</div>
+                                            <div style={{width: '40px', textAlign: 'center'}}>{match.score}</div>
                                             <div style={{
-                                                width          : '75px',
+                                                width          : '40px',
                                                 textAlign      : 'center',
                                                 backgroundColor: match.status === 'Win' ? COLOR_SUCCESS : (match.status === 'Lost' ? COLOR_DANGER : COLOR_WARNING),
                                                 color          : 'white',
                                                 borderRadius   : '5px',
                                                 padding        : '2px 2px',
                                                 margin         : '0 2px'
-                                            }}>{match.status}</div>
+                                            }} className="">{match.outcomeName}</div>
                                             <div style={{
-                                                width          : '75px',
+                                                width          : '40px',
                                                 textAlign      : 'center',
                                                 backgroundColor: match.status === 'Win' ? COLOR_SUCCESS : (match.status === 'Lost' ? COLOR_DANGER : COLOR_WARNING),
-                                                color          : 'white',
-                                                borderRadius   : '5px',
-                                                padding        : '2px 2px',
-                                                margin         : '0 2px'
-                                            }}>{match.outcomeName}</div>
-                                            <div style={{
-                                                width          : '75px',
-                                                textAlign      : 'center',
-                                                backgroundColor: COLOR_PRIMARY,
                                                 color          : 'white',
                                                 borderRadius   : '5px',
                                                 padding        : '2px 2px',

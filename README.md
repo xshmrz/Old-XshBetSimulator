@@ -1,11 +1,10 @@
-# Xsh Bet Simulator
+# Ultimate Bet Simulator
 
 ![Ultimate Bet Simulator](image-header.webp)
 
 ## Proje Genel Bakış
 
-Ultimate Bet Simulator, API'den maç verilerini çekerek 4 maçlık kuponlar oluşturur, her kupona 1000 TL yatırır ve
-kar/zarar simülasyonu yapar.
+**Ultimate Bet Simulator**, API'den maç verilerini çekerek 4 maçlık kuponlar oluşturur, her kupona 1000 TL yatırır ve kar/zarar simülasyonu yapar. Bu uygulama, bahis dünyasına dair analiz yapmanıza ve stratejilerinizi test etmenize olanak tanır.
 
 ## Proje URL'si
 
@@ -13,11 +12,19 @@ Canlı sürümü inceleyin: [xsh-react-firebase.firebaseapp.com](https://xsh-rea
 
 ## İletişim
 
-Sorularınız için: xshmrz@gmail.com
+Sorularınız için: [xshmrz@gmail.com](mailto:xshmrz@gmail.com)
 
 ## Başlarken
 
-Proje dosyasını klonlayın ve bağımlılıkları yükleyin.
+Bu projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları takip edin.
+
+### Gereksinimler
+
+- Node.js
+- npm (Node Package Manager)
+- Firebase hesabı
+
+### Kurulum
 
 1. **Depoyu Klonlayın:**
 
@@ -32,7 +39,9 @@ Proje dosyasını klonlayın ve bağımlılıkları yükleyin.
     npm install
     ```
 
-3. **`.env` Dosyası Oluşturun:**
+3. **`.env` Dosyasını Oluşturun:**
+
+   Projenin kök dizininde bir `.env` dosyası oluşturun ve aşağıdaki içeriği ekleyin:
 
     ```plaintext
     REACT_APP_API_URL_MATCH_GET=https://sportsbook.iddaa.com/SportsBook/getPopulerBets?sportId=1&limit=40
@@ -64,9 +73,13 @@ Proje dosyasını klonlayın ve bağımlılıkları yükleyin.
 
    Uygulama [http://localhost:3000](http://localhost:3000) adresinde çalışacaktır.
 
+## Kullanım
+
+Uygulama açıldığında, API'den maç verilerini çeker ve 4 maçlık kuponlar oluşturur. Her kupona 1000 TL yatırılır ve sonuçlar simüle edilerek kar/zarar hesaplanır. Kuponlar ve maç sonuçları uygulama arayüzünde görüntülenir.
+
 ## Dağıtım
 
-Firebase ile dağıtmak için:
+Firebase kullanarak projeyi dağıtmak için:
 
 ```bash
 firebase deploy
