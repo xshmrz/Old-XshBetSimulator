@@ -1,9 +1,5 @@
 # Xsh Bet Simulator
 
-<div align="center">
-<img src="./src/image-header.webp" style="width: 1920px; height: 300px; object-fit:cover !important; border-radius: 5px" alt="">
-</div>
-
 ## Proje Genel Bakış
 
 **Xsh Bet Simulator**, API'den maç verilerini çekerek 4 maçlık kuponlar oluşturur, her kupona 1000 TL yatırır ve
