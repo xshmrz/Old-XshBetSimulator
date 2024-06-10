@@ -27,9 +27,7 @@ export const PageHome = () => {
         modelCoupon.GetAll({
                                callBackSuccess: async (couponData) => {
 
-                                   couponData.forEach(function (value) {
-                                       modelCoupon.Update({id: value.id,data:{created_at : moment().format("YYYY-MM-DD HH:ii")}})
-                                   })
+
 
 
                                    const enrichedCoupons = await Promise.all(

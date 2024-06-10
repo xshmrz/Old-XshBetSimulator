@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Model}                      from './Model';
+import moment                       from 'moment';
 const modelCoupon         = new Model('coupon');
 const modelMatch          = new Model('match');
 const API_URL_MATCH_GET   = process.env.REACT_APP_API_URL_MATCH_GET;
@@ -69,7 +70,7 @@ export const PageMatchGet = () => {
     const saveCouponToDB         = (coupon, couponId) => {
         const eventIds = coupon.map(match => match.eventId);
         modelCoupon.Create({
-                               data           : {couponId: couponId, eventIds: eventIds, status: 'Pending'},
+                               data           : {couponId: couponId, eventIds: eventIds, status: 'Pending', created_at: moment().format()},
                                callBackSuccess: function () {
                                    console.log('Coupon successfully created:', couponId);
                                    coupon.forEach(match => {

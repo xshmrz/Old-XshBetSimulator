@@ -1,10 +1,12 @@
 # Ultimate Bet Simulator
 
-![Ultimate Bet Simulator](image-header.webp)
+<img src="image-header.webp" style="width: 1920px; height: 300px;object-fit:cover; border-radius: 5px" alt="">
 
 ## Proje Genel Bakış
 
-**Ultimate Bet Simulator**, API'den maç verilerini çekerek 4 maçlık kuponlar oluşturur, her kupona 1000 TL yatırır ve kar/zarar simülasyonu yapar. Bu uygulama, bahis dünyasına dair analiz yapmanıza ve stratejilerinizi test etmenize olanak tanır.
+**Ultimate Bet Simulator**, API'den maç verilerini çekerek 4 maçlık kuponlar oluşturur, her kupona 1000 TL yatırır ve
+kar/zarar simülasyonu yapar. Bu uygulama, bahis dünyasına dair analiz yapmanıza ve stratejilerinizi test etmenize olanak
+tanır.
 
 ## Proje URL'si
 
@@ -75,7 +77,8 @@ Bu projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları tak
 
 ## Kullanım
 
-Uygulama açıldığında, API'den maç verilerini çeker ve 4 maçlık kuponlar oluşturur. Her kupona 1000 TL yatırılır ve sonuçlar simüle edilerek kar/zarar hesaplanır. Kuponlar ve maç sonuçları uygulama arayüzünde görüntülenir.
+Uygulama açıldığında, API'den maç verilerini çeker ve 4 maçlık kuponlar oluşturur. Her kupona 1000 TL yatırılır ve
+sonuçlar simüle edilerek kar/zarar hesaplanır. Kuponlar ve maç sonuçları uygulama arayüzünde görüntülenir.
 
 ## Dağıtım
 
@@ -83,3 +86,28 @@ Firebase kullanarak projeyi dağıtmak için:
 
 ```bash
 firebase deploy
+```
+
+## Proje Yapısı
+
+- **`index.js`**: Uygulamanın ana giriş noktası, yönlendirmeyi ayarlar.
+- **`Model.js`**: Firebase veritabanı işlemlerini yönetir.
+- **`PageHome.js`**: Kuponları gösterir ve kar/zarar hesaplar.
+- **`PageMatchGet.js`**: Maç verilerini çeker ve kuponlar oluşturur.
+- **`PageMatchCheck.js`**: Maç sonuçlarını kontrol eder ve veritabanını günceller.
+- **`PageLayout.js`**: Sayfalar için düzen bileşeni.
+
+## Simülasyon Detayları
+
+- **Her Kupon:** 4 maç içerir.
+- **Bahis Miktarı:** Her kupona 1000 TL.
+- **Kar/Zarar Hesaplama:** Her kupondaki maçların oranlarına dayanarak yapılır.
+
+## Lisans
+
+Bu proje MIT Lisansı ile lisanslanmıştır - ayrıntılar için [LICENSE](LICENSE) dosyasına bakın.
+
+---
+
+Sevgiyle yapıldı ❤️
+
