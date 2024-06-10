@@ -101,25 +101,6 @@ firebase deploy
 | `PageMatchCheck.js` | Maç sonuçlarını kontrol eder ve veritabanını günceller. |
 | `PageLayout.js`     | Sayfalar için düzen bileşeni.                           |
 
-## Simülasyon Detayları
-
-| Özellik                 | Açıklama                                             |
-|-------------------------|------------------------------------------------------|
-| **Her Kupon**           | 4 maç içerir.                                        |
-| **Bahis Miktarı**       | Her kupona 1000 TL.                                  |
-| **Kar/Zarar Hesaplama** | Her kupondaki maçların oranlarına dayanarak yapılır. |
-
-## Renkler ve Stil
-
-| Renk Tipi         | Hex Değeri |
-|-------------------|------------|
-| **Birincil Renk** | #007BFF    |
-| **Başarı Rengi**  | #28A745    |
-| **Tehlike Rengi** | #DC3545    |
-| **Uyarı Rengi**   | #8C6600    |
-| **Açık Renk**     | #D9E1EC    |
-| **Koyu Renk**     | #343A40    |
-
 ## Lisans
 
 Bu proje MIT Lisansı ile lisanslanmıştır - ayrıntılar için [LICENSE](LICENSE) dosyasına bakın.
