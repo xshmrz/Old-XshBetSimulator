@@ -1,7 +1,7 @@
 # Xsh Bet Simulator
 
 <div align="center">
-<img src="./src/image-header.webp" style="width: 1920px; height: 300px;object-fit:cover; border-radius: 5px" alt="">
+<img src="./src/image-header.webp" style="width: 1920px; height: 300px; object-fit:cover !important; border-radius: 5px" alt="">
 </div>
 
 ## Proje Genel Bakış
