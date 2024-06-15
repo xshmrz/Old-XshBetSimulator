@@ -5,10 +5,6 @@ import {PageLayout}                   from './PageLayout';
 import {PageHome}                     from './PageHome';
 import {PageMatchGet}                 from './PageMatchGet';
 import {PageMatchCheck}               from './PageMatchCheck';
-/**
- * Main application component.
- * Sets up the routing for the application using React Router.
- */
 const App = () => {
     return (
         <BrowserRouter>
@@ -22,6 +18,5 @@ const App = () => {
         </BrowserRouter>
     );
 };
-// Create and render the root element.
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App/>);

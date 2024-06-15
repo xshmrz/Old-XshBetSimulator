@@ -1,28 +1,22 @@
-import React, {useEffect} from 'react';
-import {Model}            from './Model';
-import moment             from 'moment/moment';
-const modelCoupon           = new Model('coupon');
-const modelMatch            = new Model('match');
+import React, {useEffect, useState} from 'react';
+import {Model}                      from './Model';
+import moment                       from 'moment/moment';
+const matchModel            = new Model('match');
 const API_URL_CHECK         = process.env.REACT_APP_API_URL_CHECK;
-/**
- * PageMatchCheck component to check match results and update the database.
- */
 export const PageMatchCheck = () => {
-    /**
-     * Fetch match data from the API and update the database.
-     */
-    const fetchData = () => {
-        fetch(API_URL_CHECK + moment().format('YYYY-MM-DD'))
+    const [loading, setLoading] = useState('Loading');
+    const fetchMatchData        = async () => {
+        await fetch(API_URL_CHECK + moment().format('YYYY-MM-DD'))
             .then(response => response.json())
-            .then(function (response) {
+            .then(response => {
                 const matchesData = response;
                 const matchMap    = new Map();
                 matchesData.data.matches.forEach(match => {
                     matchMap.set(match.sgId, match);
                 });
-                modelMatch.GetAll({
-                                      callBackSuccess: function (response) {
-                                          response.forEach(function (dbMatch) {
+                matchModel.GetAll({
+                                      callBackSuccess: response => {
+                                          response.forEach(dbMatch => {
                                               const apiMatch = matchMap.get(dbMatch.eventId);
                                               if (apiMatch) {
                                                   let homeScore = apiMatch.sc.ht.r;
@@ -32,109 +26,80 @@ export const PageMatchCheck = () => {
                                                   const score   = homeScore + '/' + awayScore;
                                                   let status    = 'Pending';
                                                   if (homeScore !== '-' && awayScore !== '-') {
-                                                      if (dbMatch.outcomeName === '1') {
-                                                          if (homeScore > awayScore) {
-                                                              status = 'Win';
-                                                          }
-                                                          else {
-                                                              status = 'Lost';
-                                                          }
+                                                      if (dbMatch.outcomeName === '1' && homeScore > awayScore) {
+                                                          status = 'Win';
                                                       }
-                                                      if (dbMatch.outcomeName === '0') {
-                                                          if (homeScore === awayScore) {
-                                                              status = 'Win';
-                                                          }
-                                                          else {
-                                                              status = 'Lost';
-                                                          }
+                                                      else if (dbMatch.outcomeName === '0' && homeScore === awayScore) {
+                                                          status = 'Win';
                                                       }
-                                                      if (dbMatch.outcomeName === '2') {
-                                                          if (homeScore < awayScore) {
-                                                              status = 'Win';
-                                                          }
-                                                          else {
-                                                              status = 'Lost';
-                                                          }
+                                                      else if (dbMatch.outcomeName === '2' && homeScore < awayScore) {
+                                                          status = 'Win';
+                                                      }
+                                                      else {
+                                                          status = 'Lost';
                                                       }
                                                   }
-                                                  modelMatch.Update({
+                                                  matchModel.Update({
                                                                         id  : dbMatch.id,
-                                                                        data: {
-                                                                            status: status,
-                                                                            score : score
-                                                                        }
+                                                                        data: {status: status, score: score}
                                                                     });
+                                                  setLoading('Complete');
                                               }
                                           });
                                       },
-                                      callBackError  : function (error) {
+                                      callBackError  : error => {
                                           console.error('Error fetching pending matches:', error);
                                       }
                                   });
             });
-        fetch(API_URL_CHECK + moment().add(-1, 'days').format('YYYY-MM-DD'))
+        await fetch(API_URL_CHECK + moment().add(-1, 'days').format('YYYY-MM-DD'))
             .then(response => response.json())
-            .then(function (response) {
+            .then(response => {
                 const matchesData = response;
                 const matchMap    = new Map();
                 matchesData.data.matches.forEach(match => {
                     matchMap.set(match.sgId, match);
                 });
-                modelMatch.GetAll({
+                matchModel.GetAll({
                                       queryParams    : [{field: 'status', operator: '==', value: 'Pending'}],
-                                      callBackSuccess: function (response) {
-                                          response.forEach(function (dbMatch) {
+                                      callBackSuccess: response => {
+                                          response.forEach(dbMatch => {
                                               const apiMatch = matchMap.get(dbMatch.eventId);
                                               if (apiMatch) {
                                                   const homeScore = apiMatch.sc.ht.r;
                                                   const awayScore = apiMatch.sc.at.r;
                                                   const score     = homeScore + '/' + awayScore;
-                                                  var status      = 'Pending';
-                                                  if (dbMatch.outcomeName === '1') {
-                                                      if (homeScore > awayScore) {
-                                                          status = 'Win';
-                                                      }
-                                                      else {
-                                                          status = 'Lost';
-                                                      }
+                                                  let status = 'Pending';
+                                                  if (dbMatch.outcomeName === '1' && homeScore > awayScore) {
+                                                      status = 'Win';
                                                   }
-                                                  if (dbMatch.outcomeName === '0') {
-                                                      if (homeScore === awayScore) {
-                                                          status = 'Win';
-                                                      }
-                                                      else {
-                                                          status = 'Lost';
-                                                      }
+                                                  else if (dbMatch.outcomeName === '0' && homeScore === awayScore) {
+                                                      status = 'Win';
                                                   }
-                                                  if (dbMatch.outcomeName === '2') {
-                                                      if (homeScore < awayScore) {
-                                                          status = 'Win';
-                                                      }
-                                                      else {
-                                                          status = 'Lost';
-                                                      }
+                                                  else if (dbMatch.outcomeName === '2' && homeScore < awayScore) {
+                                                      status = 'Win';
                                                   }
-                                                  modelMatch.Update({
+                                                  else {
+                                                      status = 'Lost';
+                                                  }
+                                                  matchModel.Update({
                                                                         id  : dbMatch.id,
-                                                                        data: {
-                                                                            status: status,
-                                                                            score : score
-                                                                        }
+                                                                        data: {status: status, score: score}
                                                                     });
                                               }
                                           });
                                       },
-                                      callBackError  : function (error) {
+                                      callBackError  : error => {
                                           console.error('Error fetching pending matches:', error);
                                       }
                                   });
+            })
+            .then(() => {
+                setLoading('Complete');
             });
     };
-    // Fetch data on component mount
     useEffect(() => {
-        fetchData();
+        fetchMatchData();
     }, []);
-    return (
-        <div>PageMatchCheck</div>
-    );
+    return <div>PageMatchCheck : {loading}</div>;
 };
