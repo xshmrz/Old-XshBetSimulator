@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useSearchParams} from 'react-router-dom';
 import {Model}                      from './Model';
 import moment                       from 'moment/moment';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -12,16 +13,18 @@ const DARK_COLOR         = process.env.REACT_APP_COLOR_DARK;
 const API_URL_CHECK      = process.env.REACT_APP_API_URL_CHECK;
 const API_URL_MATCH_GET  = process.env.REACT_APP_API_URL_MATCH_GET;
 const MATCHES_PER_COUPON = parseInt(process.env.REACT_APP_MATCHES_PER_COUPON);
-const couponModel        = new Model('coupon');
-const matchModel         = new Model('match');
+const modelCoupon        = new Model('coupon');
+const modelMatch         = new Model('match');
+const ModelCron          = new Model('cron');
 export const PageHome    = () => {
-    const [coupons, setCoupons]             = useState([]);
-    const [error, setError]                 = useState(null);
-    const [loading, setLoading]           = useState(true); // Loading state
-    const [activeIndex, setActiveIndex]     = useState(null);
-    const [totalEarnings, setTotalEarnings] = useState(0);
-    const [totalSpent, setTotalSpent]       = useState(0);
-    const xMatchDataFetch                 = async (url) => {
+    const [baseError, setBaseError]            = useState(null);
+    const [baseLoading, setBaseLoading]        = useState(true); // Loading state
+    const [coupons, setCoupons]                = useState([]);
+    const [activeIndex, setActiveIndex]        = useState(null);
+    const [totalEarnings, setTotalEarnings]    = useState(0);
+    const [totalSpent, setTotalSpent]          = useState(0);
+    const [searchParams]                       = useSearchParams();
+    const xMatchCheckDataFetch                 = async (url) => {
         try {
             const response = await fetch(url);
             return await response.json();
@@ -31,7 +34,7 @@ export const PageHome    = () => {
             return null;
         }
     };
-    const xMatchDataUpdateStatus          = (dbMatch, apiMatch) => {
+    const xMatchCheckDataUpdateStatus          = (dbMatch, apiMatch) => {
         const homeScore = apiMatch.sc.ht.r ?? '-';
         const awayScore = apiMatch.sc.at.r ?? '-';
         const score     = `${homeScore}/${awayScore}`;
@@ -46,22 +49,22 @@ export const PageHome    = () => {
                 status = 'Lost';
             }
         }
-        matchModel.Update({
+        modelMatch.Update({
                               id  : dbMatch.id,
                               data: {status, score}
                           });
     };
-    const xMatchCheck                     = async () => {
-        const todayMatches     = await xMatchDataFetch(`${API_URL_CHECK}${moment().format('YYYY-MM-DD')}`);
-        const yesterdayMatches = await xMatchDataFetch(`${API_URL_CHECK}${moment().subtract(1, 'days').format('YYYY-MM-DD')}`);
+    const xMatchCheck                          = async () => {
+        const todayMatches     = await xMatchCheckDataFetch(`${API_URL_CHECK}${moment().format('YYYY-MM-DD')}`);
+        const yesterdayMatches = await xMatchCheckDataFetch(`${API_URL_CHECK}${moment().subtract(1, 'days').format('YYYY-MM-DD')}`);
         if (todayMatches) {
             const matchMap = new Map(todayMatches.data.matches.map(match => [match.sgId, match]));
-            matchModel.GetAll({
+            modelMatch.GetAll({
                                   callBackSuccess: response => {
                                       response.forEach(dbMatch => {
                                           const apiMatch = matchMap.get(dbMatch.eventId);
                                           if (apiMatch) {
-                                              xMatchDataUpdateStatus(dbMatch, apiMatch);
+                                              xMatchCheckDataUpdateStatus(dbMatch, apiMatch);
                                           }
                                       });
                                   },
@@ -72,13 +75,13 @@ export const PageHome    = () => {
         }
         if (yesterdayMatches) {
             const matchMap = new Map(yesterdayMatches.data.matches.map(match => [match.sgId, match]));
-            matchModel.GetAll({
+            modelMatch.GetAll({
                                   queryParams    : [{field: 'status', operator: '==', value: 'Pending'}],
                                   callBackSuccess: response => {
                                       response.forEach(dbMatch => {
                                           const apiMatch = matchMap.get(dbMatch.eventId);
                                           if (apiMatch) {
-                                              xMatchDataUpdateStatus(dbMatch, apiMatch);
+                                              xMatchCheckDataUpdateStatus(dbMatch, apiMatch);
                                           }
                                       });
                                   },
@@ -88,19 +91,20 @@ export const PageHome    = () => {
                               });
         }
     };
-    const xMatchGetCheckMatchesInDB       = async (matches) => {
+    // ->
+    const xMatchGenerateCheckMatchesInDB       = async (matches) => {
         const availableMatches = [];
         for (const match of matches) {
-            const exists = await xMatchGetCheckMatchesInDBExists(match.eventName);
+            const exists = await xMatchGenerateCheckMatchesInDBExists(match.eventName);
             if (!exists) {
                 availableMatches.push(match);
             }
         }
         return availableMatches;
     };
-    const xMatchGetCheckMatchesInDBExists = (eventName) => {
+    const xMatchGenerateCheckMatchesInDBExists = (eventName) => {
         return new Promise((resolve, reject) => {
-            matchModel.GetAll({
+            modelMatch.GetAll({
                                   queryParams    : [{field: 'eventName', operator: '==', value: eventName}],
                                   callBackSuccess: response => {
                                       resolve(response.length > 0);
@@ -111,7 +115,7 @@ export const PageHome    = () => {
                               });
         });
     };
-    const xMatchGetCreateCoupons          = (matches) => {
+    const xMatchGenerateGetCreateCoupons       = (matches) => {
         const coupons = [];
         while (matches.length >= MATCHES_PER_COUPON) {
             const coupon = matches.splice(0, MATCHES_PER_COUPON);
@@ -119,16 +123,16 @@ export const PageHome    = () => {
         }
         return coupons;
     };
-    const xMatchGetGenerateUniqueCouponId = () => {
+    const xMatchGenerateGenerateUniqueCouponId = () => {
         return 'coupon_' + Math.random().toString(36).substr(2, 9);
     };
-    const xMatchGetSaveCouponToDb         = (coupon, couponId) => {
+    const xMatchGenerateSaveCouponToDb         = (coupon, couponId) => {
         const eventIds = coupon.map(match => match.eventId);
-        couponModel.Create({
+        modelCoupon.Create({
                                data           : {couponId, eventIds, status: 'Pending', created_at: moment().format()},
                                callBackSuccess: () => {
                                    coupon.forEach(match => {
-                                       matchModel.Create({
+                                       modelMatch.Create({
                                                              data           : {...match, couponId, status: 'Pending', score: '-/-'},
                                                              callBackSuccess: () => {
                                                                  console.log('Match successfully created:', match.eventId, 'Coupon ID:', couponId);
@@ -144,8 +148,8 @@ export const PageHome    = () => {
                                }
                            });
     };
-    const xMatchGet                       = async () => {
-        const matchesData = await xMatchDataFetch(API_URL_MATCH_GET);
+    const xMatchGenerate                       = async () => {
+        const matchesData = await xMatchCheckDataFetch(API_URL_MATCH_GET);
         if (matchesData) {
             const matches = matchesData.data.filter(data => data.marketName === 'Maç Sonucu');
             if (matches.length < MATCHES_PER_COUPON) {
@@ -153,11 +157,11 @@ export const PageHome    = () => {
                 return;
             }
             try {
-                const availableMatches = await xMatchGetCheckMatchesInDB(matches);
-                const coupons          = xMatchGetCreateCoupons(availableMatches);
+                const availableMatches = await xMatchGenerateCheckMatchesInDB(matches);
+                const coupons          = xMatchGenerateGetCreateCoupons(availableMatches);
                 coupons.forEach(coupon => {
-                    const couponId = xMatchGetGenerateUniqueCouponId();
-                    xMatchGetSaveCouponToDb(coupon, couponId);
+                    const couponId = xMatchGenerateGenerateUniqueCouponId();
+                    xMatchGenerateSaveCouponToDb(coupon, couponId);
                 });
             }
             catch (error) {
@@ -168,14 +172,15 @@ export const PageHome    = () => {
             console.error('Error fetching data from API.');
         }
     };
-    const xMatchShow                      = () => {
-        couponModel.GetAll({
+    // ->
+    const xMatchShow                           = () => {
+        modelCoupon.GetAll({
                                orderParams    : [{field: 'created_at', direction: 'desc'}],
                                callBackSuccess: async (couponData) => {
                                    const enrichedCoupons = await Promise.all(
                                        couponData.map(async (coupon) => {
                                            return new Promise((resolve, reject) => {
-                                               matchModel.GetAll({
+                                               modelMatch.GetAll({
                                                                      queryParams    : [{field: 'couponId', operator: '==', value: coupon.couponId}],
                                                                      callBackSuccess: (matches) => {
                                                                          const totalOdds     = matches.reduce((acc, match) => acc * parseFloat(match.odd), 1).toFixed(2);
@@ -190,21 +195,42 @@ export const PageHome    = () => {
                                            });
                                        })
                                    );
-                                   const earnings        = enrichedCoupons.reduce((acc, coupon) => coupon.allMatchesWon ? acc + (coupon.totalOdds * 1000) : acc, 0);
-                                   const spent           = enrichedCoupons.length * 1000;
+                                   // Kupon durumunu belirleme
+                                   enrichedCoupons.forEach(coupon => {
+                                       let couponStatus = 'Pending';
+                                       const now        = moment();
+                                       let hasLostMatch = false;
+                                       coupon.matches.forEach(match => {
+                                           const matchEndTime = moment(match.eventDate).add(3, 'hours');
+                                           if (now.isAfter(matchEndTime)) {
+                                               if (match.status === 'Lost') {
+                                                   hasLostMatch = true;
+                                               }
+                                           }
+                                       });
+                                       if (hasLostMatch) {
+                                           couponStatus = 'Lost';
+                                       }
+                                       else if (coupon.matches.every(match => match.status === 'Win')) {
+                                           couponStatus = 'Win';
+                                       }
+                                       coupon.status = couponStatus;
+                                   });
+                                   const earnings = enrichedCoupons.reduce((acc, coupon) => coupon.allMatchesWon ? acc + (coupon.totalOdds * 1000) : acc, 0);
+                                   const spent    = enrichedCoupons.length * 1000;
                                    setCoupons(enrichedCoupons);
                                    setTotalEarnings(earnings);
                                    setTotalSpent(spent);
-                                   setLoading(false); // Set loading to false when data is loaded
+                                   setBaseLoading(false); // Set loading to false when data is loaded
                                },
                                callBackError  : (error) => {
                                    console.error('Error fetching coupon data:', error);
-                                   setError('Error fetching coupon data.');
-                                   setLoading(false); // Set loading to false in case of error
+                                   setBaseError('Error fetching coupon data.');
+                                   setBaseLoading(false); // Set loading to false in case of error
                                }
                            });
     };
-    const xMatchShowToggleDetails         = (index) => {
+    const xMatchShowToggleDetails              = (index) => {
         setActiveIndex(activeIndex === index ? null : index);
         setCoupons((prevCoupons) =>
                        prevCoupons.map((coupon, i) => ({
@@ -213,33 +239,51 @@ export const PageHome    = () => {
                        }))
         );
     };
-    const xMatchShowFormatDate            = (dateString) => {
+    const xMatchShowFormatDate                 = (dateString) => {
         const options = {year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'};
         return new Date(dateString).toLocaleDateString('tr-TR', options);
     };
+    const xMatchShowFormatMoney                = (moneyString) => {
+        return moneyString.toLocaleString('tr-TR', {currency: 'TRY', style: 'currency', currencyDisplay: 'code'}).replace('TRY', '');
+    };
     useEffect(() => {
-        xMatchGet();
+        const xMatchGetCron = () => {
+            const lastUpdate = searchParams.get('lastUpdate');
+            if (lastUpdate !== null) {
+                ModelCron.Create({lastUpdate: lastUpdate});
+            }
+        };
+        xMatchGetCron();
+        xMatchGenerate();
         xMatchCheck();
         xMatchShow();
     }, []);
-    if (loading) {
+    if (baseLoading) {
         return (
             <div style={{display: 'flex', justifyContent: 'center', fontFamily: 'monospace', fontSize: '11px', overflowY: 'auto', height: '100vh'}}>
                 <div style={{width: '100%', maxWidth: '800px'}}>
                     <div style={{
-                        padding        : '20px 10px',
+                        padding     : '0 10px',
                         marginBottom   : '10px',
                         backgroundColor: LIGHT_COLOR,
                         border         : `1px solid ${DARK_COLOR}`,
                         display        : 'flex',
                         justifyContent : 'space-between',
                         alignItems     : 'center',
-                        borderRadius   : '5px'
+                        borderRadius: '5px',
+                        minHeight   : '50px'
                     }}>
                         <div>Xsh Bet Simulator</div>
                         <div>
-                            <div style={{color: DARK_COLOR}}>
-                                <FontAwesomeIcon icon={Fa.faSpinner} spin/>
+                            <div style={{
+                                textAlign      : 'center',
+                                backgroundColor: WARNING_COLOR,
+                                color          : 'white',
+                                borderRadius   : '5px',
+                                padding        : '2px 5px',
+                                minWidth       : '120px'
+                            }}>
+                                LOADING
                             </div>
                         </div>
                     </div>
@@ -247,24 +291,32 @@ export const PageHome    = () => {
             </div>
         );
     }
-    if (error) {
+    if (baseError) {
         return (
             <div style={{display: 'flex', justifyContent: 'center', fontFamily: 'monospace', fontSize: '11px', overflowY: 'auto', height: '100vh'}}>
                 <div style={{width: '100%', maxWidth: '800px'}}>
                     <div style={{
-                        padding        : '20px 10px',
+                        padding     : '0 10px',
                         marginBottom   : '10px',
                         backgroundColor: LIGHT_COLOR,
                         border         : `1px solid ${DARK_COLOR}`,
                         display        : 'flex',
                         justifyContent : 'space-between',
                         alignItems     : 'center',
-                        borderRadius   : '5px'
+                        borderRadius: '5px',
+                        minHeight   : '50px'
                     }}>
                         <div>Xsh Bet Simulator</div>
                         <div>
-                            <div style={{color: DARK_COLOR}}>
-                                Error
+                            <div style={{
+                                textAlign      : 'center',
+                                backgroundColor: DANGER_COLOR,
+                                color          : 'white',
+                                borderRadius   : '5px',
+                                padding        : '2px 5px',
+                                minWidth       : '120px'
+                            }}>
+                                SYSTEM ERROR
                             </div>
                         </div>
                     </div>
@@ -272,23 +324,33 @@ export const PageHome    = () => {
             </div>
         );
     }
+    const getBalance      = totalEarnings - totalSpent;
+    const getBalanceColor = getBalance >= 0 ? SUCCESS_COLOR : DANGER_COLOR;
     return (
         <div style={{display: 'flex', justifyContent: 'center', fontFamily: 'monospace', fontSize: '11px', overflowY: 'auto', height: '100vh'}}>
             <div style={{width: '100%', maxWidth: '800px'}}>
                 <div style={{
-                    padding        : '20px 10px',
+                    padding     : '0 10px',
                     marginBottom   : '10px',
                     backgroundColor: LIGHT_COLOR,
                     border         : `1px solid ${DARK_COLOR}`,
                     display        : 'flex',
                     justifyContent : 'space-between',
                     alignItems     : 'center',
-                    borderRadius   : '5px'
+                    borderRadius: '5px',
+                    minHeight   : '50px'
                 }}>
                     <div>Xsh Bet Simulator</div>
                     <div>
-                        <div style={{color: DARK_COLOR}}>
-                            {(totalEarnings - totalSpent).toLocaleString('tr-TR', {currency: 'TRY', style: 'currency', currencyDisplay: 'code'}).replace('TRY', ' TRY')}
+                        <div style={{
+                            textAlign      : 'center',
+                            backgroundColor: getBalanceColor,
+                            color          : 'white',
+                            borderRadius   : '5px',
+                            padding        : '2px 5px',
+                            minWidth       : '120px'
+                        }}>
+                            {xMatchShowFormatMoney(getBalance)}
                         </div>
                     </div>
                 </div>
@@ -312,10 +374,21 @@ export const PageHome    = () => {
                         }}>
                             <div style={{marginRight: 'auto'}}>{moment(coupon.created_at).format('DD-MM-YY HH:mm')}</div>
                             {coupon.allMatchesWon && (
-                                <div style={{textAlign: 'center', backgroundColor: SUCCESS_COLOR, color: 'white', borderRadius: '5px', padding: '2px 5px', marginRight: '10px'}}>
-                                    {(coupon.totalOdds * 1000).toLocaleString('tr-TR', {currency: 'TRY', style: 'currency', currencyDisplay: 'code'})}
+                                <div style={{textAlign: 'right', marginRight: '10px'}}>
+                                    {xMatchShowFormatMoney(coupon.totalOdds * 1000)} TL
                                 </div>
                             )}
+                            <div style={{
+                                textAlign      : 'center',
+                                backgroundColor: coupon.status === 'Win' ? SUCCESS_COLOR : (coupon.status === 'Lost' ? DANGER_COLOR : WARNING_COLOR),
+                                color          : 'white',
+                                borderRadius   : '5px',
+                                padding        : '2px 5px',
+                                marginRight    : '10px',
+                                minWidth       : '65px'
+                            }}>
+                                {coupon.status}
+                            </div>
                             <div style={{width: '40px', textAlign: 'center', backgroundColor: PRIMARY_COLOR, color: 'white', borderRadius: '5px', padding: '2px 2px', margin: '0'}}>{coupon.totalOdds}</div>
                         </div>
                         {coupon.showDetails && (
