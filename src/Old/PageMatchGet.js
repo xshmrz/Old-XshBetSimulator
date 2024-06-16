@@ -81,7 +81,6 @@ export const PageMatchGet = () => {
                         });
                     })
                     .then(() => {
-                        setLoading('Complete');
                     })
                     .catch(error => {
                         console.error('Error checking matches in the database:', error);

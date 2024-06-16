@@ -5,7 +5,7 @@ const matchModel            = new Model('match');
 const API_URL_CHECK         = process.env.REACT_APP_API_URL_CHECK;
 export const PageMatchCheck = () => {
     const [loading, setLoading] = useState('Loading');
-    const fetchMatchData        = async () => {
+    const xMatchCheck = async () => {
         await fetch(API_URL_CHECK + moment().format('YYYY-MM-DD'))
             .then(response => response.json())
             .then(response => {
@@ -43,7 +43,7 @@ export const PageMatchCheck = () => {
                                                                         id  : dbMatch.id,
                                                                         data: {status: status, score: score}
                                                                     });
-                                                  setLoading('Complete');
+
                                               }
                                           });
                                       },
@@ -95,11 +95,10 @@ export const PageMatchCheck = () => {
                                   });
             })
             .then(() => {
-                setLoading('Complete');
             });
     };
     useEffect(() => {
-        fetchMatchData();
+        xMatchCheck();
     }, []);
     return <div>PageMatchCheck : {loading}</div>;
 };
