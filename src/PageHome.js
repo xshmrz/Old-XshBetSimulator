@@ -4,138 +4,70 @@ import {Model}                      from './Model';
 import moment                       from 'moment/moment';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as Fa           from '@fortawesome/free-solid-svg-icons';
+// ->
 const PRIMARY_COLOR      = process.env.REACT_APP_COLOR_PRIMARY;
 const SUCCESS_COLOR      = process.env.REACT_APP_COLOR_SUCCESS;
 const DANGER_COLOR       = process.env.REACT_APP_COLOR_DANGER;
 const WARNING_COLOR      = process.env.REACT_APP_COLOR_WARNING;
 const LIGHT_COLOR        = process.env.REACT_APP_COLOR_LIGHT;
 const DARK_COLOR         = process.env.REACT_APP_COLOR_DARK;
+// ->
 const API_URL_CHECK      = process.env.REACT_APP_API_URL_CHECK;
 const API_URL_MATCH_GET  = process.env.REACT_APP_API_URL_MATCH_GET;
 const MATCHES_PER_COUPON = parseInt(process.env.REACT_APP_MATCHES_PER_COUPON);
-const modelCoupon        = new Model('coupon');
-const modelMatch         = new Model('match');
+// ->
+const couponModel        = new Model('coupon');
+const matchModel         = new Model('match');
+// ->
 export const PageHome    = () => {
-    const [baseError, setBaseError]            = useState(null);
-    const [baseLoading, setBaseLoading]        = useState(true); // Loading state
-    const [coupons, setCoupons]                = useState([]);
-    const [activeIndex, setActiveIndex]        = useState(null);
-    const [totalEarnings, setTotalEarnings]    = useState(0);
-    const [totalSpent, setTotalSpent]          = useState(0);
-    const [searchParams]                       = useSearchParams();
-    const xMatchCheckDataFetch                 = async (url) => {
+    const [baseError, setBaseError]             = useState(null);
+    const [baseLoading, setBaseLoading]         = useState(true);
+    const [coupons, setCoupons]                 = useState([]);
+    const [activeIndex, setActiveIndex]         = useState(null);
+    const [totalEarnings, setTotalEarnings]     = useState(0);
+    const [totalSpent, setTotalSpent]           = useState(0);
+    const [searchParams]                        = useSearchParams();
+    // ->
+    const fetchDataFromApi                      = async (url) => {
         try {
             const response = await fetch(url);
             return await response.json();
         }
         catch (error) {
-            console.error('Error fetching matches data:', error);
+            console.error('Maç verilerini çekerken hata oluştu:', error);
             return null;
         }
     };
-    const xMatchCheckDataUpdateStatus = (dbMatch, apiMatch) => {
-        const homeScore = apiMatch.sc.ht.r ?? '-';
-        const awayScore = apiMatch.sc.at.r ?? '-';
-        const score = `${homeScore}/${awayScore}`;
-        let status = 'Pending';
-        if (homeScore !== '-' && awayScore !== '-') {
-            if (dbMatch.marketName === 'Maç Sonucu') {
-                if ((dbMatch.outcomeName === '1' && homeScore > awayScore) ||
-                    (dbMatch.outcomeName === '0' && homeScore === awayScore) ||
-                    (dbMatch.outcomeName === '2' && homeScore < awayScore)) {
-                    status = 'Win';
-                } else {
-                    status = 'Lost';
-                }
-            } else if (dbMatch.marketName === 'Altı/Üstü 2,5') {
-                const totalGoals = parseInt(homeScore) + parseInt(awayScore);
-                if ((dbMatch.outcomeName === 'Üst' && totalGoals > 2.5) ||
-                    (dbMatch.outcomeName === 'Alt' && totalGoals <= 2.5)) {
-                    status = 'Win';
-                } else {
-                    status = 'Lost';
-                }
-            } else if (dbMatch.marketName === 'Karşılıklı Gol') {
-                if ((dbMatch.outcomeName === 'Var' && homeScore > 0 && awayScore > 0) ||
-                    (dbMatch.outcomeName === 'Yok' && (homeScore === 0 || awayScore === 0))) {
-                    status = 'Win';
-                } else {
-                    status = 'Lost';
-                }
-            }
-        }
-        modelMatch.Update({
-            id: dbMatch.id,
-            data: { status, score }
-        });
-    };
-    
-    const xMatchCheck = async () => {
-        const todayMatches = await xMatchCheckDataFetch(`${API_URL_CHECK}${moment().format('YYYY-MM-DD')}`);
-        const yesterdayMatches = await xMatchCheckDataFetch(`${API_URL_CHECK}${moment().subtract(1, 'days').format('YYYY-MM-DD')}`);
-        const processMatches = (matches) => {
-            const matchMap = new Map(matches.data.matches.map(match => [match.sgId, match]));
-            modelMatch.GetAll({
-                callBackSuccess: response => {
-                    response.forEach(dbMatch => {
-                        const apiMatch = matchMap.get(dbMatch.eventId);
-                        if (apiMatch) {
-                            xMatchCheckDataUpdateStatus(dbMatch, apiMatch);
-                        }
-                    });
-                },
-                callBackError: error => {
-                    console.error('Error fetching pending matches:', error);
-                }
-            });
-        };
-    
-        if (todayMatches) {
-            processMatches(todayMatches);
-        }
-        if (yesterdayMatches) {
-            modelMatch.GetAll({
-                queryParams: [{ field: 'status', operator: '==', value: 'Pending' }],
-                callBackSuccess: response => {
-                    response.forEach(dbMatch => {
-                        const apiMatch = matchMap.get(dbMatch.eventId);
-                        if (apiMatch) {
-                            xMatchCheckDataUpdateStatus(dbMatch, apiMatch);
-                        }
-                    });
-                },
-                callBackError: error => {
-                    console.error('Error fetching pending matches:', error);
-                }
-            });
-        }
-    };
-    
-    const xMatchGenerateCheckMatchesInDB = async (matches) => {
+    // ->
+    const createCoupon_GetAvailableMatches      = async (matches) => {
         const availableMatches = [];
         for (const match of matches) {
-            const exists = await xMatchGenerateCheckMatchesInDBExists(match.eventName);
+            const exists = await createCoupon_CheckMatchExists(match.eventName, match.marketName, match.outcomeName);
             if (!exists) {
                 availableMatches.push(match);
             }
         }
         return availableMatches;
     };
-    
-    const xMatchGenerateCheckMatchesInDBExists = (eventName) => {
+    const createCoupon_CheckMatchExists         = (eventName, marketName, outcomeName) => {
         return new Promise((resolve, reject) => {
-            modelMatch.GetAll({
-                queryParams: [{ field: 'eventName', operator: '==', value: eventName }],
-                callBackSuccess: response => {
-                    resolve(response.length > 0);
-                },
-                callBackError: error => {
-                    reject(error);
-                }
-            });
+            matchModel.GetAll({
+                                  // -> Edit : !!!
+                                  queryParams    : [
+                                      {field: 'eventName', operator: '==', value: eventName},
+                                      {field: 'marketName', operator: '==', value: marketName},
+                                      {field: 'outcomeName', operator: '==', value: outcomeName}
+                                  ],
+                                  callBackSuccess: response => {
+                                      resolve(response.length > 0);
+                                  },
+                                  callBackError  : error => {
+                                      reject(error);
+                                  }
+                              });
         });
-    };    
-    const xMatchGenerateGetCreateCoupons       = (matches) => {
+    };
+    const createCoupon_CreateCoupons            = (matches) => {
         const coupons = [];
         while (matches.length >= MATCHES_PER_COUPON) {
             const coupon = matches.splice(0, MATCHES_PER_COUPON);
@@ -143,66 +75,131 @@ export const PageHome    = () => {
         }
         return coupons;
     };
-    const xMatchGenerateGenerateUniqueCouponId = () => {
+    const createCoupon_GenerateCouponId         = () => {
         return 'coupon_' + Math.random().toString(36).substr(2, 9);
     };
-    const xMatchGenerateSaveCouponToDb         = (coupon, couponId) => {
+    const createCoupon_SaveCouponToDb           = (coupon, couponId) => {
         const eventIds = coupon.map(match => match.eventId);
-        modelCoupon.Create({
+        couponModel.Create({
                                data           : {couponId, eventIds, status: 'Pending', created_at: moment().format()},
                                callBackSuccess: () => {
                                    coupon.forEach(match => {
-                                       modelMatch.Create({
+                                       matchModel.Create({
                                                              data           : {...match, couponId, status: 'Pending', score: '-/-'},
                                                              callBackSuccess: () => {
-                                                                 console.log('Match successfully created:', match.eventId, 'Coupon ID:', couponId);
+                                                                 console.log('Maç başarıyla oluşturuldu:', match.eventId, 'Kupon ID:', couponId);
                                                              },
                                                              callBackError  : error => {
-                                                                 console.error('Error creating match:', error);
+                                                                 console.error('Maç oluştururken hata oluştu:', error);
                                                              }
                                                          });
                                    });
                                },
                                callBackError  : error => {
-                                   console.error('Error creating coupon:', error);
+                                   console.error('Kupon oluştururken hata oluştu:', error);
                                }
                            });
     };
-    const xMatchGenerate = async () => {
-        const matchesData = await xMatchCheckDataFetch(API_URL_MATCH_GET);
+    const createCoupon                          = async () => {
+        const matchesData = await fetchDataFromApi(API_URL_MATCH_GET);
         if (matchesData) {
-            const matches = matchesData.data.filter(data => 
-                data.marketName === 'Maç Sonucu' || 
-                data.marketName === 'Altı/Üstü 2,5' || 
-                data.marketName === 'Karşılıklı Gol'
-            );
-            if (matches.length < MATCHES_PER_COUPON) {
-                console.error('Not enough match data available.');
+            // -> Edit : Kg Var & Yok, 2.5 Alt & Üst
+            const matchResultMatches      = matchesData.data.filter(data => data.marketName === 'Maç Sonucu');
+            const bothTeamsToScoreMatches = matchesData.data.filter(data => data.marketName === 'Karşılıklı Gol');
+            const overUnderMatches        = matchesData.data.filter(data => data.marketName === 'Altı/Üstü 2,5');
+            const allMatches              = [...matchResultMatches, ...bothTeamsToScoreMatches, ...overUnderMatches];
+            if (allMatches.length < MATCHES_PER_COUPON) {
+                console.error('Yeterli maç verisi yok.');
                 return;
             }
             try {
-                const availableMatches = await xMatchGenerateCheckMatchesInDB(matches);
-                const coupons = xMatchGenerateGetCreateCoupons(availableMatches);
+                const availableMatches = await createCoupon_GetAvailableMatches(allMatches);
+                const coupons          = createCoupon_CreateCoupons(availableMatches);
                 coupons.forEach(coupon => {
-                    const couponId = xMatchGenerateGenerateUniqueCouponId();
-                    xMatchGenerateSaveCouponToDb(coupon, couponId);
+                    const couponId = createCoupon_GenerateCouponId();
+                    createCoupon_SaveCouponToDb(coupon, couponId);
                 });
-            } catch (error) {
-                console.error('Error checking matches in the database:', error);
             }
-        } else {
-            console.error('Error fetching data from API.');
+            catch (error) {
+                console.error('Veritabanındaki maçları kontrol ederken hata oluştu:', error);
+            }
         }
-    };    
+        else {
+            console.error('API\'den veri çekerken hata oluştu.');
+        }
+    };
     // ->
-    const xMatchShow                           = () => {
-        modelCoupon.GetAll({
+    const checkMatchAndCoupon_UpdateMatchStatus = (dbMatch, apiMatch) => {
+        const homeScore = apiMatch.sc.ht.r ?? '-';
+        const awayScore = apiMatch.sc.at.r ?? '-';
+        const score     = `${homeScore}/${awayScore}`;
+        let status      = 'Pending';
+        if (homeScore !== '-' && awayScore !== '-') {
+            // -> Edit : Kg Var & Yok, 2.5 Alt & Üst
+            if ((dbMatch.outcomeName === '1' && homeScore > awayScore) ||
+                (dbMatch.outcomeName === '0' && homeScore === awayScore) ||
+                (dbMatch.outcomeName === '2' && homeScore < awayScore) ||
+                (dbMatch.outcomeName === 'Var' && homeScore > 0 && awayScore > 0) ||
+                (dbMatch.outcomeName === 'Yok' && (homeScore === 0 || awayScore === 0)) ||
+                (dbMatch.outcomeName === 'Alt' && (homeScore + awayScore <= 2.5)) ||
+                (dbMatch.outcomeName === 'Üst' && (homeScore + awayScore > 2.5))) {
+                status = 'Win';
+            }
+            else {
+                status = 'Lost';
+            }
+        }
+        matchModel.Update({
+                              id  : dbMatch.id,
+                              data: {status, score}
+                          });
+    };
+    const checkMatchAndCoupon                   = async () => {
+        const todayMatches     = await fetchDataFromApi(`${API_URL_CHECK}${moment().format('YYYY-MM-DD')}`);
+        const yesterdayMatches = await fetchDataFromApi(`${API_URL_CHECK}${moment().subtract(1, 'days').format('YYYY-MM-DD')}`);
+        if (todayMatches) {
+            const matchMap = new Map(todayMatches.data.matches.map(match => [match.sgId, match]));
+            matchModel.GetAll({
+                                  callBackSuccess: response => {
+                                      response.forEach(dbMatch => {
+                                          const apiMatch = matchMap.get(dbMatch.eventId);
+                                          if (apiMatch) {
+                                              checkMatchAndCoupon_UpdateMatchStatus(dbMatch, apiMatch);
+                                          }
+                                      });
+                                  },
+                                  callBackError  : error => {
+                                      console.error('Bekleyen maçları çekerken hata oluştu:', error);
+                                  }
+                              });
+        }
+        if (yesterdayMatches) {
+            const matchMap = new Map(yesterdayMatches.data.matches.map(match => [match.sgId, match]));
+            matchModel.GetAll({
+                                  queryParams    : [{field: 'status', operator: '==', value: 'Pending'}],
+                                  callBackSuccess: response => {
+                                      response.forEach(dbMatch => {
+                                          const apiMatch = matchMap.get(dbMatch.eventId);
+                                          if (apiMatch) {
+                                              checkMatchAndCoupon_UpdateMatchStatus(dbMatch, apiMatch);
+                                          }
+                                      });
+                                  },
+                                  callBackError  : error => {
+                                      console.error('Bekleyen maçları çekerken hata oluştu:', error);
+                                  }
+                              });
+        }
+    };
+    // ->
+    const displayData                           = () => {
+        couponModel.GetAll({
                                orderParams    : [{field: 'created_at', direction: 'desc'}],
                                callBackSuccess: async (couponData) => {
                                    const enrichedCoupons = await Promise.all(
                                        couponData.map(async (coupon) => {
                                            return new Promise((resolve, reject) => {
-                                               modelMatch.GetAll({
+                                               matchModel.GetAll({
                                                                      queryParams    : [{field: 'couponId', operator: '==', value: coupon.couponId}],
                                                                      callBackSuccess: (matches) => {
                                                                          const totalOdds     = matches.reduce((acc, match) => acc * parseFloat(match.odd), 1).toFixed(2);
@@ -210,14 +207,14 @@ export const PageHome    = () => {
                                                                          resolve({...coupon, matches, totalOdds, allMatchesWon});
                                                                      },
                                                                      callBackError  : (error) => {
-                                                                         console.error('Error fetching match data:', error);
+                                                                         console.error('Maç verilerini çekerken hata oluştu:', error);
                                                                          reject(error);
                                                                      }
                                                                  });
                                            });
                                        })
                                    );
-                                   // Kupon durumunu belirleme
+                                   // ->
                                    enrichedCoupons.forEach(coupon => {
                                        let couponStatus = 'Pending';
                                        const now        = moment();
@@ -243,16 +240,16 @@ export const PageHome    = () => {
                                    setCoupons(enrichedCoupons);
                                    setTotalEarnings(earnings);
                                    setTotalSpent(spent);
-                                   setBaseLoading(false); // Set loading to false when data is loaded
+                                   setBaseLoading(false);
                                },
                                callBackError  : (error) => {
-                                   console.error('Error fetching coupon data:', error);
-                                   setBaseError('Error fetching coupon data.');
-                                   setBaseLoading(false); // Set loading to false in case of error
+                                   console.error('Kupon verilerini çekerken hata oluştu:', error);
+                                   setBaseError('Kupon verilerini çekerken hata oluştu.');
+                                   setBaseLoading(false);
                                }
                            });
     };
-    const xMatchShowToggleDetails              = (index) => {
+    const displayData_ToggleCouponDetails       = (index) => {
         setActiveIndex(activeIndex === index ? null : index);
         setCoupons((prevCoupons) =>
                        prevCoupons.map((coupon, i) => ({
@@ -261,18 +258,24 @@ export const PageHome    = () => {
                        }))
         );
     };
-    const xMatchShowFormatDate                 = (dateString) => {
+    // ->
+    const helper_FormatDate                     = (dateString) => {
         const options = {year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'};
         return new Date(dateString).toLocaleDateString('tr-TR', options);
     };
-    const xMatchShowFormatMoney                = (moneyString) => {
+    const helper_FormatMoney                    = (moneyString) => {
         return moneyString.toLocaleString('tr-TR', {currency: 'TRY', style: 'currency', currencyDisplay: 'code'}).replace('TRY', '');
     };
+    // ->
     useEffect(() => {
-        xMatchGenerate();
-        xMatchCheck();
-        xMatchShow();
+        createCoupon();
+        checkMatchAndCoupon();
+        displayData();
     }, []);
+    // ->
+    const balance      = totalEarnings - totalSpent;
+    const balanceColor = balance >= 0 ? SUCCESS_COLOR : DANGER_COLOR;
+    // ->
     if (baseLoading) {
         return (
             <div style={{display: 'flex', justifyContent: 'center', fontFamily: 'monospace', fontSize: '11px', overflowY: 'auto', height: '100vh'}}>
@@ -298,7 +301,7 @@ export const PageHome    = () => {
                                 padding        : '2px 5px',
                                 minWidth       : '120px'
                             }}>
-                                LOADING
+                                YÜKLENİYOR
                             </div>
                         </div>
                     </div>
@@ -331,7 +334,7 @@ export const PageHome    = () => {
                                 padding        : '2px 5px',
                                 minWidth       : '120px'
                             }}>
-                                SYSTEM ERROR
+                                SİSTEM HATASI
                             </div>
                         </div>
                     </div>
@@ -339,8 +342,7 @@ export const PageHome    = () => {
             </div>
         );
     }
-    const getBalance      = totalEarnings - totalSpent;
-    const getBalanceColor = getBalance >= 0 ? SUCCESS_COLOR : DANGER_COLOR;
+    // ->
     return (
         <div style={{display: 'flex', justifyContent: 'center', fontFamily: 'monospace', fontSize: '11px', overflowY: 'auto', height: '100vh'}}>
             <div style={{width: '100%', maxWidth: '800px'}}>
@@ -358,14 +360,25 @@ export const PageHome    = () => {
                     <div>Xsh Bet Simulator</div>
                     <div>
                         <div style={{
-                            textAlign      : 'center',
-                            backgroundColor: getBalanceColor,
+                            textAlign      : 'right',
+                            backgroundColor: balanceColor,
                             color          : 'white',
                             borderRadius   : '5px',
-                            padding        : '2px 5px',
+                            padding        : '2px 10px',
+                            minWidth       : '120px',
+                            marginBottom   : '2px'
+                        }}>
+                            {helper_FormatMoney(balance)} TL
+                        </div>
+                        <div style={{
+                            textAlign      : 'right',
+                            backgroundColor: WARNING_COLOR,
+                            color          : 'white',
+                            borderRadius   : '5px',
+                            padding        : '2px 10px',
                             minWidth       : '120px'
                         }}>
-                            {xMatchShowFormatMoney(getBalance)}
+                            {helper_FormatMoney(totalSpent)} TL
                         </div>
                     </div>
                 </div>
@@ -379,7 +392,7 @@ export const PageHome    = () => {
                         borderRadius: '5px',
                         transition  : 'margin 0.3s'
                     }}>
-                        <div onClick={() => xMatchShowToggleDetails(index)} style={{
+                        <div onClick={() => displayData_ToggleCouponDetails(index)} style={{
                             cursor         : 'pointer',
                             padding        : '10px',
                             backgroundColor: LIGHT_COLOR,
@@ -390,7 +403,7 @@ export const PageHome    = () => {
                             <div style={{marginRight: 'auto'}}>{moment(coupon.created_at).format('DD-MM-YY HH:mm')}</div>
                             {coupon.allMatchesWon && (
                                 <div style={{textAlign: 'right', marginRight: '10px'}}>
-                                    {xMatchShowFormatMoney(coupon.totalOdds * 1000)} TL
+                                    {helper_FormatMoney(coupon.totalOdds * 1000)} TL
                                 </div>
                             )}
                             <div style={{
@@ -409,6 +422,22 @@ export const PageHome    = () => {
                         {coupon.showDetails && (
                             <div style={{backgroundColor: '#FFFFFF', borderTop: `1px solid ${DARK_COLOR}`}}>
                                 {coupon.matches.map((match, matchIndex) => {
+                                    // -> Edit : Kg Var & Yok, 2.5 Alt & Üst
+                                    switch (match.outcomeName) {
+                                        case 'Var':
+                                            match.outcomeName = 'Kg Var';
+                                            break;
+                                        case 'Yok':
+                                            match.outcomeName = 'Kg Yok';
+                                            break;
+                                        case 'Alt':
+                                            match.outcomeName = '2.5 Alt';
+                                            break;
+                                        case 'Üst':
+                                            match.outcomeName = '2.5 Üst';
+                                            break;
+                                        default:
+                                    }
                                     const isLastRow = matchIndex === coupon.matches.length - 1;
                                     return (
                                         <div key={match.eventId} style={{
@@ -419,10 +448,10 @@ export const PageHome    = () => {
                                             alignItems    : 'center'
                                         }}>
                                             <div style={{marginRight: 'auto', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: '200px'}}>{match.eventName}</div>
-                                            <div style={{width: '125px', textAlign: 'center', display: ''}} className="hide-mobile">{xMatchShowFormatDate(match.eventDate)}</div>
+                                            <div style={{width: '125px', textAlign: 'center'}} className="hide-mobile">{helper_FormatDate(match.eventDate)}</div>
                                             <div style={{width: '40px', textAlign: 'center'}}>{match.score}</div>
                                             <div style={{
-                                                width          : '40px',
+                                                width: '60px',
                                                 textAlign      : 'center',
                                                 backgroundColor: match.status === 'Win' ? SUCCESS_COLOR : (match.status === 'Lost' ? DANGER_COLOR : WARNING_COLOR),
                                                 color          : 'white',
