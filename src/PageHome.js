@@ -15,7 +15,6 @@ const API_URL_MATCH_GET  = process.env.REACT_APP_API_URL_MATCH_GET;
 const MATCHES_PER_COUPON = parseInt(process.env.REACT_APP_MATCHES_PER_COUPON);
 const modelCoupon        = new Model('coupon');
 const modelMatch         = new Model('match');
-const ModelCron          = new Model('cron');
 export const PageHome    = () => {
     const [baseError, setBaseError]            = useState(null);
     const [baseLoading, setBaseLoading]        = useState(true); // Loading state
@@ -247,13 +246,6 @@ export const PageHome    = () => {
         return moneyString.toLocaleString('tr-TR', {currency: 'TRY', style: 'currency', currencyDisplay: 'code'}).replace('TRY', '');
     };
     useEffect(() => {
-        const xMatchGetCron = () => {
-            const lastUpdate = searchParams.get('lastUpdate');
-            if (lastUpdate !== null) {
-                ModelCron.Create({lastUpdate: lastUpdate});
-            }
-        };
-        xMatchGetCron();
         xMatchGenerate();
         xMatchCheck();
         xMatchShow();
