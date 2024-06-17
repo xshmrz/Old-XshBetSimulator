@@ -33,65 +33,85 @@ export const PageHome    = () => {
             return null;
         }
     };
-    const xMatchCheckDataUpdateStatus          = (dbMatch, apiMatch) => {
+    const xMatchCheckDataUpdateStatus = (dbMatch, apiMatch) => {
         const homeScore = apiMatch.sc.ht.r ?? '-';
         const awayScore = apiMatch.sc.at.r ?? '-';
-        const score     = `${homeScore}/${awayScore}`;
-        let status      = 'Pending';
+        const score = `${homeScore}/${awayScore}`;
+        let status = 'Pending';
         if (homeScore !== '-' && awayScore !== '-') {
-            if ((dbMatch.outcomeName === '1' && homeScore > awayScore) ||
-                (dbMatch.outcomeName === '0' && homeScore === awayScore) ||
-                (dbMatch.outcomeName === '2' && homeScore < awayScore)) {
-                status = 'Win';
-            }
-            else {
-                status = 'Lost';
+            if (dbMatch.marketName === 'Maç Sonucu') {
+                if ((dbMatch.outcomeName === '1' && homeScore > awayScore) ||
+                    (dbMatch.outcomeName === '0' && homeScore === awayScore) ||
+                    (dbMatch.outcomeName === '2' && homeScore < awayScore)) {
+                    status = 'Win';
+                } else {
+                    status = 'Lost';
+                }
+            } else if (dbMatch.marketName === 'Altı/Üstü 2,5') {
+                const totalGoals = parseInt(homeScore) + parseInt(awayScore);
+                if ((dbMatch.outcomeName === 'Üst' && totalGoals > 2.5) ||
+                    (dbMatch.outcomeName === 'Alt' && totalGoals <= 2.5)) {
+                    status = 'Win';
+                } else {
+                    status = 'Lost';
+                }
+            } else if (dbMatch.marketName === 'Karşılıklı Gol') {
+                if ((dbMatch.outcomeName === 'Var' && homeScore > 0 && awayScore > 0) ||
+                    (dbMatch.outcomeName === 'Yok' && (homeScore === 0 || awayScore === 0))) {
+                    status = 'Win';
+                } else {
+                    status = 'Lost';
+                }
             }
         }
         modelMatch.Update({
-                              id  : dbMatch.id,
-                              data: {status, score}
-                          });
+            id: dbMatch.id,
+            data: { status, score }
+        });
     };
-    const xMatchCheck                          = async () => {
-        const todayMatches     = await xMatchCheckDataFetch(`${API_URL_CHECK}${moment().format('YYYY-MM-DD')}`);
+    
+    const xMatchCheck = async () => {
+        const todayMatches = await xMatchCheckDataFetch(`${API_URL_CHECK}${moment().format('YYYY-MM-DD')}`);
         const yesterdayMatches = await xMatchCheckDataFetch(`${API_URL_CHECK}${moment().subtract(1, 'days').format('YYYY-MM-DD')}`);
-        if (todayMatches) {
-            const matchMap = new Map(todayMatches.data.matches.map(match => [match.sgId, match]));
+        const processMatches = (matches) => {
+            const matchMap = new Map(matches.data.matches.map(match => [match.sgId, match]));
             modelMatch.GetAll({
-                                  callBackSuccess: response => {
-                                      response.forEach(dbMatch => {
-                                          const apiMatch = matchMap.get(dbMatch.eventId);
-                                          if (apiMatch) {
-                                              xMatchCheckDataUpdateStatus(dbMatch, apiMatch);
-                                          }
-                                      });
-                                  },
-                                  callBackError  : error => {
-                                      console.error('Error fetching pending matches:', error);
-                                  }
-                              });
+                callBackSuccess: response => {
+                    response.forEach(dbMatch => {
+                        const apiMatch = matchMap.get(dbMatch.eventId);
+                        if (apiMatch) {
+                            xMatchCheckDataUpdateStatus(dbMatch, apiMatch);
+                        }
+                    });
+                },
+                callBackError: error => {
+                    console.error('Error fetching pending matches:', error);
+                }
+            });
+        };
+    
+        if (todayMatches) {
+            processMatches(todayMatches);
         }
         if (yesterdayMatches) {
-            const matchMap = new Map(yesterdayMatches.data.matches.map(match => [match.sgId, match]));
             modelMatch.GetAll({
-                                  queryParams    : [{field: 'status', operator: '==', value: 'Pending'}],
-                                  callBackSuccess: response => {
-                                      response.forEach(dbMatch => {
-                                          const apiMatch = matchMap.get(dbMatch.eventId);
-                                          if (apiMatch) {
-                                              xMatchCheckDataUpdateStatus(dbMatch, apiMatch);
-                                          }
-                                      });
-                                  },
-                                  callBackError  : error => {
-                                      console.error('Error fetching pending matches:', error);
-                                  }
-                              });
+                queryParams: [{ field: 'status', operator: '==', value: 'Pending' }],
+                callBackSuccess: response => {
+                    response.forEach(dbMatch => {
+                        const apiMatch = matchMap.get(dbMatch.eventId);
+                        if (apiMatch) {
+                            xMatchCheckDataUpdateStatus(dbMatch, apiMatch);
+                        }
+                    });
+                },
+                callBackError: error => {
+                    console.error('Error fetching pending matches:', error);
+                }
+            });
         }
     };
-    // ->
-    const xMatchGenerateCheckMatchesInDB       = async (matches) => {
+    
+    const xMatchGenerateCheckMatchesInDB = async (matches) => {
         const availableMatches = [];
         for (const match of matches) {
             const exists = await xMatchGenerateCheckMatchesInDBExists(match.eventName);
@@ -101,19 +121,20 @@ export const PageHome    = () => {
         }
         return availableMatches;
     };
+    
     const xMatchGenerateCheckMatchesInDBExists = (eventName) => {
         return new Promise((resolve, reject) => {
             modelMatch.GetAll({
-                                  queryParams    : [{field: 'eventName', operator: '==', value: eventName}],
-                                  callBackSuccess: response => {
-                                      resolve(response.length > 0);
-                                  },
-                                  callBackError  : error => {
-                                      reject(error);
-                                  }
-                              });
+                queryParams: [{ field: 'eventName', operator: '==', value: eventName }],
+                callBackSuccess: response => {
+                    resolve(response.length > 0);
+                },
+                callBackError: error => {
+                    reject(error);
+                }
+            });
         });
-    };
+    };    
     const xMatchGenerateGetCreateCoupons       = (matches) => {
         const coupons = [];
         while (matches.length >= MATCHES_PER_COUPON) {
@@ -147,30 +168,32 @@ export const PageHome    = () => {
                                }
                            });
     };
-    const xMatchGenerate                       = async () => {
+    const xMatchGenerate = async () => {
         const matchesData = await xMatchCheckDataFetch(API_URL_MATCH_GET);
         if (matchesData) {
-            const matches = matchesData.data.filter(data => data.marketName === 'Maç Sonucu');
+            const matches = matchesData.data.filter(data => 
+                data.marketName === 'Maç Sonucu' || 
+                data.marketName === 'Altı/Üstü 2,5' || 
+                data.marketName === 'Karşılıklı Gol'
+            );
             if (matches.length < MATCHES_PER_COUPON) {
                 console.error('Not enough match data available.');
                 return;
             }
             try {
                 const availableMatches = await xMatchGenerateCheckMatchesInDB(matches);
-                const coupons          = xMatchGenerateGetCreateCoupons(availableMatches);
+                const coupons = xMatchGenerateGetCreateCoupons(availableMatches);
                 coupons.forEach(coupon => {
                     const couponId = xMatchGenerateGenerateUniqueCouponId();
                     xMatchGenerateSaveCouponToDb(coupon, couponId);
                 });
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Error checking matches in the database:', error);
             }
-        }
-        else {
+        } else {
             console.error('Error fetching data from API.');
         }
-    };
+    };    
     // ->
     const xMatchShow                           = () => {
         modelCoupon.GetAll({
