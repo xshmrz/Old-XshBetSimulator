@@ -41,22 +41,26 @@ export const PageHome    = () => {
     // ->
     const createCoupon_GetAvailableMatches      = async (matches) => {
         const availableMatches = [];
+        const matchEvents = new Set();
         for (const match of matches) {
-            const exists = await createCoupon_CheckMatchExists(match.eventName, match.marketName, match.outcomeName);
-            if (!exists) {
-                availableMatches.push(match);
+            const matchKey = `${match.eventName}-${match.eventDate}`;
+            if (!matchEvents.has(matchKey)) {
+                const exists = await createCoupon_CheckMatchExists(match.eventName, match.marketName, match.outcomeName, match.populerBetId);
+                if (!exists) {
+                    availableMatches.push(match);
+                    matchEvents.add(matchKey);
+                }
             }
         }
         return availableMatches;
     };
-    const createCoupon_CheckMatchExists         = (eventName, marketName, outcomeName) => {
+    const createCoupon_CheckMatchExists         = (eventName, marketName, outcomeName, populerBetId) => {
         return new Promise((resolve, reject) => {
             matchModel.GetAll({
                                   // -> Edit : !!!
                                   queryParams    : [
-                                      {field: 'eventName', operator: '==', value: eventName},
-                                      {field: 'marketName', operator: '==', value: marketName},
-                                      {field: 'outcomeName', operator: '==', value: outcomeName}
+                                      {field: 'populerBetId', operator: '==', value: populerBetId},
+                                      {field: 'marketName', operator: '==', value: marketName}
                                   ],
                                   callBackSuccess: response => {
                                       resolve(response.length > 0);
@@ -67,7 +71,7 @@ export const PageHome    = () => {
                               });
         });
     };
-    const createCoupon_CreateCoupons            = (matches) => {
+    const createCoupon_GenerateCoupon           = (matches) => {
         const coupons = [];
         while (matches.length >= MATCHES_PER_COUPON) {
             const coupon = matches.splice(0, MATCHES_PER_COUPON);
@@ -114,7 +118,7 @@ export const PageHome    = () => {
             }
             try {
                 const availableMatches = await createCoupon_GetAvailableMatches(allMatches);
-                const coupons          = createCoupon_CreateCoupons(availableMatches);
+                const coupons = createCoupon_GenerateCoupon(availableMatches);
                 coupons.forEach(coupon => {
                     const couponId = createCoupon_GenerateCouponId();
                     createCoupon_SaveCouponToDb(coupon, couponId);
@@ -357,7 +361,10 @@ export const PageHome    = () => {
                     borderRadius: '5px',
                     minHeight   : '50px'
                 }}>
-                    <div>Xsh Bet Simulator</div>
+                    <div>
+                        <div style={{marginBottom: '2px'}}>Xsh Bet Simulator</div>
+                        <div>Generate Betting Slips</div>
+                    </div>
                     <div>
                         <div style={{
                             textAlign      : 'right',
@@ -383,7 +390,13 @@ export const PageHome    = () => {
                     </div>
                 </div>
                 <div>
-                    <div><img src={require('./image-header.webp')} style={{width: '100%', height: '200px', objectFit: 'cover', marginBottom: '10px', borderRadius: '5px'}} alt="Xsh Bet Simulator"/></div>
+                    <div><img src={require('./image-header.webp')} style={{
+                        width       : '100%',
+                        height      : '200px',
+                        objectFit   : 'cover',
+                        marginBottom: '10px',
+                        borderRadius: '5px'
+                    }} alt="Xsh Bet Simulator"/></div>
                 </div>
                 {coupons.map((coupon, index) => (
                     <div key={coupon.couponId} style={{
@@ -398,7 +411,8 @@ export const PageHome    = () => {
                             backgroundColor: LIGHT_COLOR,
                             display        : 'flex',
                             justifyContent : 'space-between',
-                            alignItems     : 'center'
+                            alignItems: 'center',
+                            gap       : 10
                         }}>
                             <div style={{marginRight: 'auto'}}>{moment(coupon.created_at).format('DD-MM-YY HH:mm')}</div>
                             {coupon.allMatchesWon && (
@@ -407,17 +421,23 @@ export const PageHome    = () => {
                                 </div>
                             )}
                             <div style={{
-                                textAlign      : 'center',
                                 backgroundColor: coupon.status === 'Win' ? SUCCESS_COLOR : (coupon.status === 'Lost' ? DANGER_COLOR : WARNING_COLOR),
+                                width    : '60px',
+                                textAlign: 'center',
                                 color          : 'white',
                                 borderRadius   : '5px',
-                                padding        : '2px 5px',
-                                marginRight    : '10px',
-                                minWidth       : '65px'
+                                padding  : '5px'
                             }}>
                                 {coupon.status}
                             </div>
-                            <div style={{width: '40px', textAlign: 'center', backgroundColor: PRIMARY_COLOR, color: 'white', borderRadius: '5px', padding: '2px 2px', margin: '0'}}>{coupon.totalOdds}</div>
+                            <div style={{
+                                backgroundColor: PRIMARY_COLOR,
+                                width          : '40px',
+                                textAlign      : 'center',
+                                color          : 'white',
+                                borderRadius   : '5px',
+                                padding        : '5px'
+                            }}>{coupon.totalOdds}</div>
                         </div>
                         {coupon.showDetails && (
                             <div style={{backgroundColor: '#FFFFFF', borderTop: `1px solid ${DARK_COLOR}`}}>
@@ -445,28 +465,27 @@ export const PageHome    = () => {
                                             padding       : '10px',
                                             display       : 'flex',
                                             justifyContent: 'space-between',
-                                            alignItems    : 'center'
+                                            alignItems: 'center',
+                                            gap       : 10
                                         }}>
                                             <div style={{marginRight: 'auto', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: '200px'}}>{match.eventName}</div>
-                                            <div style={{width: '125px', textAlign: 'center'}} className="hide-mobile">{helper_FormatDate(match.eventDate)}</div>
-                                            <div style={{width: '40px', textAlign: 'center'}}>{match.score}</div>
+                                            <div style={{textAlign: 'center'}} className="hide-mobile">{helper_FormatDate(match.eventDate)}</div>
+                                            <div style={{textAlign: 'center'}}>{match.score}</div>
                                             <div style={{
-                                                width: '60px',
-                                                textAlign      : 'center',
                                                 backgroundColor: match.status === 'Win' ? SUCCESS_COLOR : (match.status === 'Lost' ? DANGER_COLOR : WARNING_COLOR),
+                                                width    : '60px',
+                                                textAlign: 'center',
                                                 color          : 'white',
                                                 borderRadius   : '5px',
-                                                padding        : '2px 2px',
-                                                margin         : '0 2px'
+                                                padding  : '5px'
                                             }}>{match.outcomeName}</div>
                                             <div style={{
+                                                backgroundColor: match.status === 'Win' ? SUCCESS_COLOR : (match.status === 'Lost' ? DANGER_COLOR : WARNING_COLOR),
                                                 width          : '40px',
                                                 textAlign      : 'center',
-                                                backgroundColor: match.status === 'Win' ? SUCCESS_COLOR : (match.status === 'Lost' ? DANGER_COLOR : WARNING_COLOR),
                                                 color          : 'white',
                                                 borderRadius   : '5px',
-                                                padding        : '2px 2px',
-                                                margin         : '0 2px'
+                                                padding        : '5px'
                                             }}>{parseFloat(match.odd).toFixed(2)}</div>
                                         </div>
                                     );
