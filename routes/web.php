@@ -92,9 +92,9 @@
         // Eski Bahislerin Durumlarını Güncelleme Fonksiyonu
         function helperUpdateBetStatus() {
             foreach (Bet()->get() as $bet) {
-                [$home, $away] = explode(":", $bet->score);
-                $home = trim($home);
-                $away = trim($away);
+                $score = explode(":", $bet->score);
+                $home  = $score[0];
+                $away  = $score[1];
                 if ($home != "-" && $away != "-") {
                     switch ($bet->marketName) {
                         case "Maç Sonucu":
@@ -134,7 +134,6 @@
         helperFetchAndProcessData(now());
         // Bahisleri Güncelle
         helperUpdateBetStatus();
-
         echo "dataCheck-Ok<br>";
     }
     Route::get('get', function () {
