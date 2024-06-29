@@ -10,7 +10,7 @@ test their betting strategies effectively.
 
 ## Live Demo
 
-Experience the live version here: [xsh-react-firebase.firebaseapp.com](https://xsh-react-firebase.firebaseapp.com)
+Experience the live version here: 
 
 ## Contact Information
 
