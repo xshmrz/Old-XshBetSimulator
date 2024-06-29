@@ -55,13 +55,9 @@ php artisan key:generate
 
 6. Create and configure the database
 
-If you are using SQLite, create the database file
-
 ```bash
 touch database/database.sqlite
 ```
-
-Update your .env file with the following database configuration
 
 ```env
 DB_CONNECTION=sqlite
