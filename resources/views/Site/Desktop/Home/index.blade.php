@@ -19,7 +19,7 @@
 									@foreach(Bet()->whereIn(marketNo,explode(",",$coupon->data))->orderBy(eventDate,"ASC")->get() as $bet)
 										<li class="list-group-item d-flex justify-content-between align-items-start p-3">
 											<div class="me-auto">
-												<div class="fw-bold">{{$bet->eventName}}</div>
+												<div class="fw-bold text-truncate">{{$bet->eventName}}</div>
 												<div class="text-muted">{{now()::parse($bet->eventDate)->format("d-m-Y H:i")}}</div>
 											</div>
 											<div class="me-2">
