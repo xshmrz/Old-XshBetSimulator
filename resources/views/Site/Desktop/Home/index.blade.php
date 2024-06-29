@@ -15,7 +15,7 @@
                         $totalPending += $coupon->odd * 1000;
                     endforeach;
                 ?>
-				<div>- {{number_format($harcanan,2)}} TL</div>
+				<div>- {{number_format($totalSpent,2)}} TL</div>
 				<div>+ {{number_format($totalWin,2)}} TL</div>
 				<div>? {{number_format($totalPending,2)}} TL</div>
 			</div>
