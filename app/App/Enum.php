@@ -105,6 +105,7 @@
             ];
         }
     }
+    # -> Project
     class EnumProjectAddedToCoupon extends EnumBase {
         const Yes = 1;
         const No  = 2;
