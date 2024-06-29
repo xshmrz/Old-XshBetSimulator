@@ -1,9 +1,7 @@
 <?php
-    use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Support\Facades\Route;
     use Illuminate\Support\Facades\Http;
     function dataGet() {
-        // Api'den Veri Çekme
         $response = Http::get(env("API_URL_GENERATE"));
         if ($response->successful()) {
             $response = $response->json();
@@ -24,9 +22,7 @@
                 }
             }
         }
-        // Kupona Eklenmemiş Ve Tarihi Geçmiş Bahisleri Silme
         Bet()->where('addedToCoupon', EnumProjectAddedToCoupon::No)->where('eventDate', '<', now()->toIso8601String())->delete();
-        // Kupona Eklenmemiş Bahisleri Geri Döndürme
         return Bet()->where('addedToCoupon', EnumProjectAddedToCoupon::No);
     }
     function dataGenerate() {
@@ -55,7 +51,6 @@
         }
     }
     function dataCheck() {
-        // Array Içinde Arama Yapan Yardımcı Fonksiyon
         function helperSearchInArray($array, $key, $value) {
             if (is_array($array)) {
                 if (isset($array[$key]) && $array[$key] == $value) {
@@ -70,7 +65,6 @@
             }
             return [];
         }
-        // Belirli Bir Tarih Için Api'den Veri Çekme Ve Işleme Fonksiyonu
         function helperFetchAndProcessData($date) {
             $response = Http::get(env("API_URL_CHECK").$date->format("Y-m-d"));
             if ($response->successful()) {
@@ -89,7 +83,6 @@
                 }
             }
         }
-        // Eski Bahislerin Durumlarını Güncelleme Fonksiyonu
         function helperUpdateBetStatus() {
             foreach (Bet()->get() as $bet) {
                 $score = explode(":", $bet->score);
@@ -126,15 +119,12 @@
                 }
             }
         }
-        // Bugün Için Bahisleri Çek Ve Işle
-        // Önceki Gün Için Bahisleri Çek Ve Işle
         helperFetchAndProcessData(now());
         helperFetchAndProcessData(now()->subDay());
-        // Bahisleri Güncelle
         helperUpdateBetStatus();
     }
     # ->
-    function isBetInProgress($matchStartTimeString) {
+    function isBetLive($matchStartTimeString) {
         $now            = now();
         $matchStartTime = now()::parse($matchStartTimeString);
         if ($now->lt($matchStartTime)) {
@@ -153,9 +143,9 @@
         return $minutesPassed > 150;
     }
     # ->
-    function checkBetProgress() {
+    function checkBetLive() {
         foreach (Bet()->get() as $bet) {
-            if (isBetInProgress($bet->eventDate)) {
+            if (isBetLive($bet->eventDate)) {
                 $bet->live = EnumProjectLive::Yes;
             }
             else {
@@ -180,9 +170,8 @@
         try {
             dataGenerate();
             dataCheck();
-            checkBetProgress();
+            checkBetLive();
             checkBetFinished();
-            # ->
             $couponUpdate                = CouponUpdate();
             $couponUpdate->status_update = EnumProjectStatusUpdate::Success;
             $couponUpdate->save();
@@ -191,10 +180,3 @@
             $couponUpdate->status_update = EnumProjectStatusUpdate::Error;
         }
     });
-
-
-
-
-
-
-
