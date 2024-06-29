@@ -102,6 +102,58 @@ const Coupon = {
     }
 };
 
+const CouponUpdate = {
+    GetBtn      : jQuery('.CouponUpdateGetBtn'),
+    GetAllBtn   : jQuery('.CouponUpdateGetAllBtn'),
+    CreateBtn   : jQuery('.CouponUpdateCreateBtn'),
+    UpdateBtn   : jQuery('.CouponUpdateUpdateBtn'),
+    DeleteBtn   : jQuery('.CouponUpdateDeleteBtn'),
+    GetFrm      : jQuery('.CouponUpdateGetFrm'),
+    GetAllFrm   : jQuery('.CouponUpdateGetAllFrm'),
+    CreateFrm   : jQuery('.CouponUpdateCreateFrm'),
+    UpdateFrm   : jQuery('.CouponUpdateUpdateFrm'),
+    DeleteFrm   : jQuery('.CouponUpdateDeleteFrm'),
+    GetMdl      : jQuery('.CouponUpdateGetMdl'),
+    GetAllMdl   : jQuery('.CouponUpdateGetAllMdl'),
+    CreateMdl   : jQuery('.CouponUpdateCreateMdl'),
+    UpdateMdl   : jQuery('.CouponUpdateUpdateMdl'),
+    DeleteMdl   : jQuery('.CouponUpdateDeleteMdl'),
+    GetMdlBtn   : jQuery('.CouponUpdateGetMdlBtn'),
+    GetAllMdlBtn: jQuery('.CouponUpdateGetAllMdlBtn'),
+    CreateMdlBtn: jQuery('.CouponUpdateCreateMdlBtn'),
+    UpdateMdlBtn: jQuery('.CouponUpdateUpdateMdlBtn'),
+    DeleteMdlBtn: jQuery('.CouponUpdateDeleteMdlBtn'),
+    makeRequest : function (type, url, data, callBackSuccess, callBackError) {
+        $.ajax({
+                   type   : type,
+                   url    : url,
+                   data   : data,
+                   success: function (response) {
+                       callBackSuccess(response);
+                   },
+                   error  : function (response) {
+                      callBackError(response);
+                   }
+               });
+    },
+    Get         : function ({id, callBackSuccess = () => {}, callBackError = () => {}}) {
+        this.makeRequest('GET', 'api/coupon-update/' + id, null, callBackSuccess, callBackError);
+    },
+    GetAll      : function ({queryParams, callBackSuccess = () => {}, callBackError = () => {}}) {
+        const url = 'api/coupon-update' + '?' + $.param(queryParams);
+        this.makeRequest('GET', url, null, callBackSuccess, callBackError);
+    },
+    Create      : function ({data, callBackSuccess = () => {}, callBackError = () => {}}) {
+        this.makeRequest('POST', 'api/coupon-update', data, callBackSuccess, callBackError);
+    },
+    Update      : function ({id, data, callBackSuccess = () => {}, callBackError = () => {}}) {
+        this.makeRequest('PUT', 'api/coupon-update/' + id, data, callBackSuccess, callBackError);
+    },
+    Delete      : function ({id, callBackSuccess = () => {}, callBackError = () => {}}) {
+        this.makeRequest('DELETE', 'api/coupon-update/' + id, null, callBackSuccess, callBackError);
+    }
+};
+
 const Migration = {
     GetBtn      : jQuery('.MigrationGetBtn'),
     GetAllBtn   : jQuery('.MigrationGetAllBtn'),

@@ -176,6 +176,22 @@
             ];
         }
     }
+    class EnumProjectStatusUpdate extends EnumBase {
+        const Success = 1;
+        const Error   = 2;
+        protected static function translations() {
+            return [
+                self::Success => trans("app.Success"),
+                self::Error   => trans("app.Error"),
+            ];
+        }
+        protected static function colors() {
+            return [
+                self::Success => "success",
+                self::Error   => "danger",
+            ];
+        }
+    }
 
 
 

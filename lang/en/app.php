@@ -17,6 +17,8 @@ return array (
   'Win' => 'Win',
   'Lost' => 'Lost',
   'Live' => 'Live',
+  'Success' => 'Success',
+  'Error' => 'Error',
   'Successful' => 'Successful',
   'User Not Found' => 'User Not Found',
   'Not Found' => 'Not Found',

@@ -6,6 +6,7 @@ Route::group(['as' => 'site.', 'prefix' => '', 'middleware' => ['MiddlewareSite'
 Route::get('', ['App\Http\Controllers\Site\Home', 'index'])->name('index');
 Route::resource('bet', 'App\Http\Controllers\Site\Base\Bet');
 Route::resource('coupon', 'App\Http\Controllers\Site\Base\Coupon');
+Route::resource('coupon-update', 'App\Http\Controllers\Site\Base\CouponUpdate');
 Route::resource('migration', 'App\Http\Controllers\Site\Base\Migration');
 Route::resource('user', 'App\Http\Controllers\Site\Base\User');
 });
@@ -13,6 +14,7 @@ Route::group(['as' => 'panel.', 'prefix' => 'panel', 'middleware' => ['Middlewar
 Route::get('', ['App\Http\Controllers\Panel\Home', 'index'])->name('index');
 Route::resource('bet', 'App\Http\Controllers\Panel\Base\Bet');
 Route::resource('coupon', 'App\Http\Controllers\Panel\Base\Coupon');
+Route::resource('coupon-update', 'App\Http\Controllers\Panel\Base\CouponUpdate');
 Route::resource('migration', 'App\Http\Controllers\Panel\Base\Migration');
 Route::resource('user', 'App\Http\Controllers\Panel\Base\User');
 });
@@ -20,12 +22,14 @@ Route::group(['as' => 'dashboard.', 'prefix' => 'dashboard', 'middleware' => ['M
 Route::get('', ['App\Http\Controllers\Dashboard\Home', 'index'])->name('index');
 Route::resource('bet', 'App\Http\Controllers\Dashboard\Base\Bet');
 Route::resource('coupon', 'App\Http\Controllers\Dashboard\Base\Coupon');
+Route::resource('coupon-update', 'App\Http\Controllers\Dashboard\Base\CouponUpdate');
 Route::resource('migration', 'App\Http\Controllers\Dashboard\Base\Migration');
 Route::resource('user', 'App\Http\Controllers\Dashboard\Base\User');
 });
 Route::group(['as' => 'api.', 'prefix' => 'api', 'middleware' => ['MiddlewareApi']], function () {
 Route::resource('bet', 'App\Http\Controllers\Api\Base\Bet');
 Route::resource('coupon', 'App\Http\Controllers\Api\Base\Coupon');
+Route::resource('coupon-update', 'App\Http\Controllers\Api\Base\CouponUpdate');
 Route::resource('migration', 'App\Http\Controllers\Api\Base\Migration');
 Route::resource('user', 'App\Http\Controllers\Api\Base\User');
 });

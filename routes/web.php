@@ -1,4 +1,5 @@
 <?php
+    use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Support\Facades\Route;
     use Illuminate\Support\Facades\Http;
     function dataGet() {
@@ -52,7 +53,6 @@
                 $coupon->save();
             }
         }
-
     }
     function dataCheck() {
         // Array Içinde Arama Yapan Yardımcı Fonksiyon
@@ -88,7 +88,6 @@
                     }
                 }
             }
-
         }
         // Eski Bahislerin Durumlarını Güncelleme Fonksiyonu
         function helperUpdateBetStatus() {
@@ -133,7 +132,6 @@
         helperFetchAndProcessData(now()->subDay());
         // Bahisleri Güncelle
         helperUpdateBetStatus();
-
     }
     # ->
     function isBetInProgress($matchStartTimeString) {
@@ -142,7 +140,7 @@
         if ($now->lt($matchStartTime)) {
             return false;
         }
-        $minutesPassed  = $now->diffInMinutes($matchStartTime);
+        $minutesPassed = $now->diffInMinutes($matchStartTime);
         return $minutesPassed >= 0 && $minutesPassed <= 150;
     }
     function isBetFinished($matchStartTimeString) {
@@ -179,10 +177,19 @@
     }
     # ->
     Route::get('get', function () {
-        dataGenerate();
-        dataCheck();
-        checkBetProgress();
-        checkBetFinished();
+        try {
+            dataGenerate();
+            dataCheck();
+            checkBetProgress();
+            checkBetFinished();
+            # ->
+            $couponUpdate                = CouponUpdate();
+            $couponUpdate->status_update = EnumProjectStatusUpdate::Success;
+            $couponUpdate->save();
+        } catch (\Exception $Ex) {
+            $couponUpdate                = CouponUpdate();
+            $couponUpdate->status_update = EnumProjectStatusUpdate::Error;
+        }
     });
 
 
