@@ -80,8 +80,8 @@
                     foreach (Bet()->get() as $bet) {
                         $search = helperSearchInArray($matches, "sgId", $bet->eventId);
                         if (!empty($search)) {
-                            $home       = $search["sc"]["ht"]["r"] ?? "-";
-                            $away       = $search["sc"]["at"]["r"] ?? "-";
+                            $home       = $search["sc"]["ht"]["c"] ?? "-";
+                            $away       = $search["sc"]["at"]["c"] ?? "-";
                             $bet->score = $home.":".$away;
                             $bet->save();
                         }
