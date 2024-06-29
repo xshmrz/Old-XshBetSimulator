@@ -1,0 +1,48 @@
+{
+  "name": "laraberg",
+  "description": "A Gutenberg implementation for Laravel",
+  "main": "resources/laraberg.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "clean": "rm -rf public/css public/js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "predev": "npm run clean",
+    "dev": "webpack --config webpack/webpack.dev.js",
+    "watch": "npm run dev -- --watch",
+    "start": "npm run watch",
+    "prebuild": "npm run clean",
+    "build": "webpack --config webpack/webpack.prod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VanOns/laraberg.git"
+  },
+  "author": "Maurice Wijnia",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/VanOns/laraberg/issues"
+  },
+  "homepage": "https://github.com/VanOns/laraberg#readme",
+  "devDependencies": {
+    "css-loader": "^6.5.1",
+    "css-minimizer-webpack-plugin": "^3.1.4",
+    "mini-css-extract-plugin": "^2.4.5",
+    "sass": "^1.43.4",
+    "sass-loader": "^12.3.0",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.2",
+    "webpack": "^5.64.2",
+    "webpack-cli": "^4.9.1",
+    "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "@van-ons/block-editor": "^1.0.0",
+    "qs": "^6.10.3"
+  },
+  "peerDependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}

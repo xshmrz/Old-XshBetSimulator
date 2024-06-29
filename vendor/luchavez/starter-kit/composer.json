@@ -1,0 +1,58 @@
+{
+    "name": "luchavez/starter-kit",
+    "description": "A starter kit for building packages and implementing DDD on Laravel 8|9|10.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "James Carlo Luchavez",
+            "email": "jamescarloluchavez@gmail.com",
+            "homepage": "https://www.linkedin.com/in/jsluchavez/"
+        }
+    ],
+    "homepage": "https://github.com/luchavez-technologies/starter-kit",
+    "keywords": ["Laravel", "StarterKit"],
+    "require": {
+        "php": "^8.0",
+        "illuminate/support": "~8|~9|~10",
+        "composer/composer": "^2.5",
+        "ext-zlib": "*",
+        "hammerstone/fast-paginate": "^1.0",
+        "spatie/laravel-query-builder": "^5.2|^4.0"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "phpunit/phpunit": "~9.0",
+        "orchestra/testbench": "~6|~7|~8"
+    },
+    "suggest": {
+        "luchavez/boilerplate-generator": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Luchavez\\StarterKit\\": "src/"
+        },
+        "files": [
+            "helpers/starter-kit-helper.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Luchavez\\StarterKit\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Luchavez\\StarterKit\\Providers\\StarterKitServiceProvider"
+            ],
+            "aliases": {
+                "StarterKit": "Luchavez\\StarterKit\\Facades\\StarterKit"
+            }
+        },
+        "branch-alias": {
+            "dev-master": "1.2.x-dev",
+            "dev-develop": "1.2.x-dev",
+            "dev-feature": "1.2.x-dev"
+        }
+    }
+}
