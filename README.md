@@ -1,5 +1,5 @@
 
-# Xsh Bet Simulator
+# Xsh-Bet-Simulator
 
 ## Project Overview
 
@@ -8,96 +8,92 @@
 displays potential profit or loss, providing users with valuable insights into the betting world and allowing them to
 test their betting strategies effectively.
 
-## Live Demo
-
-Experience the live version here: 
-
-## Contact Information
-
-For any inquiries or support, please contact us at: [xshmrz@gmail.com](mailto:xshmrz@gmail.com)
-
 ## Getting Started
 
-To run this project locally, please follow the steps below.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
-Ensure you have the following installed on your local machine:
+You need to have the following software installed on your system to run this project:
 
-- Node.js
-- npm (Node Package Manager)
+- PHP >= 7.4
+- Composer
+- SQLite
+- Laravel >= 8.x
 
 ### Installation
 
-1. **Clone the Repository:**
+1. Clone this repository
 
-   Begin by cloning the repository to your local machine using the following command:
+```bash
+git clone https://github.com/xshmrz/xsh-bet-simulator.git
+```
 
-    ```bash
-    git clone https://github.com/xshmrz/xsh-bet-simulator.git
-    cd xsh-bet-simulator
-    ```
+2. Navigate to the project directory
 
-2. **Install Dependencies:**
+```bash
+cd xsh-bet-simulator
+```
 
-   Navigate to the project directory and install the required dependencies:
+3. Install the required packages
 
-    ```bash
-    npm install
-    ```
+```bash
+composer install
+```
 
-3. **Configure Environment Variables:**
+4. Create the .env file
 
-   Create a `.env` file in the root directory of the project and add the following content to configure the necessary
-   environment variables:
+```bash
+cp .env.example .env
+```
 
-    ```plaintext
-    REACT_APP_API_URL_MATCH_GET=https://sportsbook.iddaa.com/SportsBook/getPopulerBets?sportId=1&limit=40
-    REACT_APP_API_URL_CHECK=https://statistics.iddaa.com/broadage/getEventListCache?SportId=1&SearchDate=
+5. Generate the application key
 
-    REACT_APP_FIREBASE_API_KEY=your-firebase-api-key
-    REACT_APP_FIREBASE_AUTH_DOMAIN=your-firebase-auth-domain
-    REACT_APP_FIREBASE_DATABASE_URL=your-firebase-database-url
-    REACT_APP_FIREBASE_PROJECT_ID=your-firebase-project-id
-    REACT_APP_FIREBASE_STORAGE_BUCKET=your-firebase-storage-bucket
-    REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your-firebase-messaging-sender-id
-    REACT_APP_FIREBASE_APP_ID=your-firebase-app-id
+```bash
+php artisan key:generate
+```
 
-    REACT_APP_MATCHES_PER_COUPON=4
-    ```
+6. Create and configure the database
 
-4. **Start the Application:**
+If you are using SQLite, create the database file
 
-   Launch the application with the following command:
+```bash
+touch database/database.sqlite
+```
 
-    ```bash
-    npm start
-    ```
+Update your .env file with the following database configuration
 
-   The application will be accessible at [http://localhost:3000](http://localhost:3000).
+```env
+DB_CONNECTION=sqlite
+DB_DATABASE=/absolute/path/to/database.sqlite
+```
+
+7. Run the database migrations
+
+```bash
+php artisan migrate
+```
+
+8. Start the development server
+
+```bash
+php artisan serve
+```
+
+The application should now be running at [http://localhost:8000](http://localhost:8000).
 
 ## Usage
 
-Upon launching the application, it automatically fetches match data from the API and generates betting slips, each
-containing 4 matches. A virtual bet of 1000 TL is placed on each slip, and the application simulates the betting process
-to calculate and display the potential profit or loss. The interface provides a detailed view of the betting slips and
-match results.
-
-## Deployment
-
-To deploy the project using Firebase, execute the following command:
-
-```bash
-firebase deploy
-```
-
-Ensure that you have configured Firebase CLI with your project credentials.
+Provide instructions and examples for using the project.
 
 ## Contributing
 
-We welcome contributions to improve Xsh Bet Simulator. If you have any ideas, suggestions, or bug reports, please open
-an issue or submit a pull request.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests to us.
 
 ## License
 
-This project is licensed under the MIT License. For more details, please refer to the [LICENSE](LICENSE) file.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## Contact
+
+For questions about this project, please contact: [xshmrz@gmail.com](mailto:xshmrz@gmail.com)
