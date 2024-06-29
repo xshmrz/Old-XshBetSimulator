@@ -129,8 +129,9 @@
         }
         // Bugün Için Bahisleri Çek Ve Işle
         // Önceki Gün Için Bahisleri Çek Ve Işle
-        helperFetchAndProcessData(now()->subDay());
         helperFetchAndProcessData(now());
+        helperFetchAndProcessData(now()->subDay());
+
         // Bahisleri Güncelle
         helperUpdateBetStatus();
         echo "dataCheck-Ok<br>";
