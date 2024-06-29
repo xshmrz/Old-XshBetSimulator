@@ -31,14 +31,14 @@
 				</ul>
 			</div>
 			<div class="space-x-1">
-				<button type="button" class="btn btn-sm btn-link text-white">
+				{{-- <button type="button" class="btn btn-sm btn-link text-white">
 					Root Demo
-				</button>
+				</button> --}}
 			</div>
 		</div>
 	</header>
 	@yield("section-main")
-	<footer id="page-footer" class="bg-body-light border-top sticky-bottom">
+	<footer id="page-footer" class="bg-body-light border-top">
 		<div class="content py-3">
 			<div class="row fs-sm">
 				<div class="col-sm-6 order-sm-2 py-1 text-center text-sm-end">
