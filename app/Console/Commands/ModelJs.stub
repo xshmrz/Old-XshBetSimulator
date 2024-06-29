@@ -1,0 +1,51 @@
+const {{ NAMECLASS }} = {
+    GetBtn      : jQuery('.{{ NAMECLASS }}GetBtn'),
+    GetAllBtn   : jQuery('.{{ NAMECLASS }}GetAllBtn'),
+    CreateBtn   : jQuery('.{{ NAMECLASS }}CreateBtn'),
+    UpdateBtn   : jQuery('.{{ NAMECLASS }}UpdateBtn'),
+    DeleteBtn   : jQuery('.{{ NAMECLASS }}DeleteBtn'),
+    GetFrm      : jQuery('.{{ NAMECLASS }}GetFrm'),
+    GetAllFrm   : jQuery('.{{ NAMECLASS }}GetAllFrm'),
+    CreateFrm   : jQuery('.{{ NAMECLASS }}CreateFrm'),
+    UpdateFrm   : jQuery('.{{ NAMECLASS }}UpdateFrm'),
+    DeleteFrm   : jQuery('.{{ NAMECLASS }}DeleteFrm'),
+    GetMdl      : jQuery('.{{ NAMECLASS }}GetMdl'),
+    GetAllMdl   : jQuery('.{{ NAMECLASS }}GetAllMdl'),
+    CreateMdl   : jQuery('.{{ NAMECLASS }}CreateMdl'),
+    UpdateMdl   : jQuery('.{{ NAMECLASS }}UpdateMdl'),
+    DeleteMdl   : jQuery('.{{ NAMECLASS }}DeleteMdl'),
+    GetMdlBtn   : jQuery('.{{ NAMECLASS }}GetMdlBtn'),
+    GetAllMdlBtn: jQuery('.{{ NAMECLASS }}GetAllMdlBtn'),
+    CreateMdlBtn: jQuery('.{{ NAMECLASS }}CreateMdlBtn'),
+    UpdateMdlBtn: jQuery('.{{ NAMECLASS }}UpdateMdlBtn'),
+    DeleteMdlBtn: jQuery('.{{ NAMECLASS }}DeleteMdlBtn'),
+    makeRequest : function (type, url, data, callBackSuccess, callBackError) {
+        $.ajax({
+                   type   : type,
+                   url    : url,
+                   data   : data,
+                   success: function (response) {
+                       callBackSuccess(response);
+                   },
+                   error  : function (response) {
+                      callBackError(response);
+                   }
+               });
+    },
+    Get         : function ({id, callBackSuccess = () => {}, callBackError = () => {}}) {
+        this.makeRequest('GET', 'api/{{ NAMEROUTE }}/' + id, null, callBackSuccess, callBackError);
+    },
+    GetAll      : function ({queryParams, callBackSuccess = () => {}, callBackError = () => {}}) {
+        const url = 'api/{{ NAMEROUTE }}' + '?' + $.param(queryParams);
+        this.makeRequest('GET', url, null, callBackSuccess, callBackError);
+    },
+    Create      : function ({data, callBackSuccess = () => {}, callBackError = () => {}}) {
+        this.makeRequest('POST', 'api/{{ NAMEROUTE }}', data, callBackSuccess, callBackError);
+    },
+    Update      : function ({id, data, callBackSuccess = () => {}, callBackError = () => {}}) {
+        this.makeRequest('PUT', 'api/{{ NAMEROUTE }}/' + id, data, callBackSuccess, callBackError);
+    },
+    Delete      : function ({id, callBackSuccess = () => {}, callBackError = () => {}}) {
+        this.makeRequest('DELETE', 'api/{{ NAMEROUTE }}/' + id, null, callBackSuccess, callBackError);
+    }
+};

@@ -1,0 +1,28 @@
+@import '/assets/fonts/fontawesome-full/css/all.min.css';
+// Global
+* {
+	font-size   : 12.5px !important;
+	font-weight : 400 !important;
+	}
+// Color
+$custom-colors          : (
+		"primary":    #55599b,
+		"secondary":  #fe5c06,
+		"info":       #f8b59f,
+		"success":    #03ba6d,
+		"warning":    #e8d103,
+		"danger":     #fa1f01,
+);
+$primary                : map-get($custom-colors, "primary");
+$secondary              : map-get($custom-colors, "secondary");
+$info                   : map-get($custom-colors, "info");
+$success                : map-get($custom-colors, "success");
+$warning                : map-get($custom-colors, "warning");
+$danger                 : map-get($custom-colors, "danger");
+// Font Family
+$font-family-sans-serif : SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+// Layout
+$space-boxed            : 1260px !default;
+$space-narrow           : 90% !default;
+$space-custom           : 800px !default
+

@@ -1,0 +1,10 @@
+<?php
+	namespace App\Models\Base;
+	class {{ NAMECLASS }} extends \App\Models\Core\{{ NAMECLASS }} {
+        protected static function boot() {
+            parent::boot();
+            static::retrieved(function ({{ NAMECLASS }} $model) {});
+            static::saving(function ({{ NAMECLASS }} $model) {});
+            static::deleting(function ({{ NAMECLASS }} $model) {});
+        }
+	}

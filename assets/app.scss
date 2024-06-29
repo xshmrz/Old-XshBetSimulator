@@ -1,0 +1,44 @@
+/* Authorize */
+$authorizes : (LoginBtn, LoginFrm, LoginMdl, LoginMdlBtn, RegisterBtn, RegisterFrm, RegisterMdl, RegisterMdlBtn, LostPasswordBtn, LostPasswordFrm, LostPasswordMdl, LostPasswordMdlBtn, LogoutBtn, LogoutFrm, LogoutMdl, LogoutMdlBtn);
+@each $authorize in $authorizes {
+	.#{$authorize} {
+		font-family : inherit;
+		}
+	}
+/* Font Size */
+@for $i from 1 through 100 {
+	.font-#{$i}px {
+		font-size : #{$i}px !important;
+		}
+	}
+/* Min-Max Width */
+@for $i from 1 through 500 {
+	.min-width-#{$i}px {
+		min-width : #{$i}px !important;
+		}
+	.max-width-#{$i}px {
+		max-width : #{$i}px !important;
+		}
+	}
+/* Min-Max Height */
+@for $i from 1 through 500 {
+	.min-height-#{$i}px {
+		min-height : #{$i}px !important;
+		}
+	.max-height-#{$i}px {
+		max-height : #{$i}px !important;
+		}
+	}
+/* Rectangle */
+@for $i from 1 through 500 {
+	.rectangle-#{$i}px {
+		height : #{$i}px !important;
+		width  : #{$i}px !important;
+		}
+	}
+/* Opacity */
+@for $i from 1 through 100 {
+	.bg-opacity-#{$i} {
+		--bs-bg-opacity : #{0.01 * $i} !important;
+		}
+	}

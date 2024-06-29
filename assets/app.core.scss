@@ -1,0 +1,112 @@
+$elements: (
+        GetBtn,
+        GetAllBtn,
+        CreateBtn,
+        UpdateBtn,
+        DeleteBtn,
+        GetFrm,
+        GetAllFrm,
+        CreateFrm,
+        UpdateFrm,
+        DeleteFrm,
+        GetMdl,
+        GetAllMdl,
+        CreateMdl,
+        UpdateMdl,
+        DeleteMdl,
+        GetMdlBtn,
+        GetAllMdlBtn,
+        CreateMdlBtn,
+        UpdateMdlBtn,
+        DeleteMdlBtn);
+
+@each $element in $elements {
+  .Bet#{$element} {
+    font-family: inherit;
+  }
+}
+
+$elements: (
+        GetBtn,
+        GetAllBtn,
+        CreateBtn,
+        UpdateBtn,
+        DeleteBtn,
+        GetFrm,
+        GetAllFrm,
+        CreateFrm,
+        UpdateFrm,
+        DeleteFrm,
+        GetMdl,
+        GetAllMdl,
+        CreateMdl,
+        UpdateMdl,
+        DeleteMdl,
+        GetMdlBtn,
+        GetAllMdlBtn,
+        CreateMdlBtn,
+        UpdateMdlBtn,
+        DeleteMdlBtn);
+
+@each $element in $elements {
+  .Coupon#{$element} {
+    font-family: inherit;
+  }
+}
+
+$elements: (
+        GetBtn,
+        GetAllBtn,
+        CreateBtn,
+        UpdateBtn,
+        DeleteBtn,
+        GetFrm,
+        GetAllFrm,
+        CreateFrm,
+        UpdateFrm,
+        DeleteFrm,
+        GetMdl,
+        GetAllMdl,
+        CreateMdl,
+        UpdateMdl,
+        DeleteMdl,
+        GetMdlBtn,
+        GetAllMdlBtn,
+        CreateMdlBtn,
+        UpdateMdlBtn,
+        DeleteMdlBtn);
+
+@each $element in $elements {
+  .Migration#{$element} {
+    font-family: inherit;
+  }
+}
+
+$elements: (
+        GetBtn,
+        GetAllBtn,
+        CreateBtn,
+        UpdateBtn,
+        DeleteBtn,
+        GetFrm,
+        GetAllFrm,
+        CreateFrm,
+        UpdateFrm,
+        DeleteFrm,
+        GetMdl,
+        GetAllMdl,
+        CreateMdl,
+        UpdateMdl,
+        DeleteMdl,
+        GetMdlBtn,
+        GetAllMdlBtn,
+        CreateMdlBtn,
+        UpdateMdlBtn,
+        DeleteMdlBtn);
+
+@each $element in $elements {
+  .User#{$element} {
+    font-family: inherit;
+  }
+}
+

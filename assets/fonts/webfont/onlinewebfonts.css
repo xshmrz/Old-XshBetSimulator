@@ -1,0 +1,165 @@
+@charset "utf-8";
+/*
+      www.OnlineWebFonts.Com 
+      You must credit the author Copy this link on your web 
+      <div>Font made from <a href="http://www.onlinewebfonts.com">oNline Web Fonts</a>is licensed by CC BY 3.0</div>
+      OR
+      <a href="http://www.onlinewebfonts.com">oNline Web Fonts</a>
+*/
+@font-face {
+	font-family : "onlinewebfonts";
+	src         : url("onlinewebfonts.eot");
+	src         : url("onlinewebfonts.eot?#iefix") format("embedded-opentype"),
+	url("onlinewebfonts.woff2") format("woff2"),
+	url("onlinewebfonts.woff") format("woff"),
+	url("onlinewebfonts.ttf") format("truetype"),
+	url("onlinewebfonts.svg#onlinewebfonts") format("svg");
+	font-weight : normal;
+	font-style  : normal;
+	}
+[class^="i_"]:before, [class*=" i_"]:before {
+	font-family            : "onlinewebfonts";
+	speak                  : none;
+	font-style             : normal;
+	font-weight            : normal;
+	font-variant           : normal;
+	text-transform         : none;
+	line-height            : 1;
+	-webkit-font-smoothing : antialiased;
+	}
+.i_ballerinas:before {
+	content : "\e010";
+	}
+.i_bathing_suit:before {
+	content : "\e011";
+	}
+.i_bikini:before {
+	content : "\e012";
+	}
+.i_bikini_4:before {
+	content : "\e013";
+	}
+.i_bikini_5:before {
+	content : "\e014";
+	}
+.i_blazer:before {
+	content : "\e015";
+	}
+.i_bootleg_jeans:before {
+	content : "\e016";
+	}
+.i_boots:before {
+	content : "\e017";
+	}
+.i_boxers:before {
+	content : "\e018";
+	}
+.i_boxers_10:before {
+	content : "\e019";
+	}
+.i_cap:before {
+	content : "\e01a";
+	}
+.i_cargo_shorts:before {
+	content : "\e01b";
+	}
+.i_dress:before {
+	content : "\e01c";
+	}
+.i_dress_14:before {
+	content : "\e01d";
+	}
+.i_dress_15:before {
+	content : "\e01e";
+	}
+.i_dress_16:before {
+	content : "\e01f";
+	}
+.i_gloves:before {
+	content : "\e020";
+	}
+.i_gloves_18:before {
+	content : "\e021";
+	}
+.i_heeled_ankle:before {
+	content : "\e022";
+	}
+.i_heeled_boots:before {
+	content : "\e023";
+	}
+.i_hoodie:before {
+	content : "\e024";
+	}
+.i_jacket:before {
+	content : "\e025";
+	}
+.i_jacket_hoodie:before {
+	content : "\e026";
+	}
+.i_long_skirt:before {
+	content : "\e027";
+	}
+.i_long_sleeve:before {
+	content : "\e028";
+	}
+.i_round_neck:before {
+	content : "\e029";
+	}
+.i_scarf:before {
+	content : "\e02a";
+	}
+.i_skirt:before {
+	content : "\e02b";
+	}
+.i_skirt_29:before {
+	content : "\e02c";
+	}
+.i_sneakers:before {
+	content : "\e02d";
+	}
+.i_socks:before {
+	content : "\e02e";
+	}
+.i_suit:before {
+	content : "\e02f";
+	}
+.i_sun_hat:before {
+	content : "\e030";
+	}
+.i_swim_shorts:before {
+	content : "\e031";
+	}
+.i_t_shirt:before {
+	content : "\e032";
+	}
+.i_tankini:before {
+	content : "\e033";
+	}
+.i_top:before {
+	content : "\e034";
+	}
+.i_top_38:before {
+	content : "\e035";
+	}
+.i_trousers:before {
+	content : "\e036";
+	}
+.i_underwear:before {
+	content : "\e037";
+	}
+.i_vest:before {
+	content : "\e038";
+	}
+.i_vest_42:before {
+	content : "\e039";
+	}
+.i_vest_43:before {
+	content : "\e03a";
+	}
+.i_vest_44:before {
+	content : "\e03b";
+	}
+.i_vneck_t:before {
+	content : "\e03c";
+	}
+

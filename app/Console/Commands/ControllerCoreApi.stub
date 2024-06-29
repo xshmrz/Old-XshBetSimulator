@@ -1,0 +1,77 @@
+<?php
+    namespace App\Http\Controllers\Api\Core;
+    use Illuminate\Http\Request;
+    use App\Http\Controllers\Controller;
+    use Bjerke\ApiQueryBuilder\QueryBuilder as QueryBuilder;
+    class {{ NAMECLASS }} extends Controller {
+        public function index() {
+            $model          = {{ NAMECLASS }}();
+            $queryBuilder   = new QueryBuilder($model, \request());
+            $queryBuilder   = $queryBuilder->build();
+            if (\request()->has("pagination") && \request()->get("pagination") == "true") {
+                if (\request()->has("per_page")) {
+                    return responseOk(["message" => trans("app.Successful"), "data" => $queryBuilder->paginate(\request()->get("per_page"))->appends(\request()->except('page'))]);
+                }
+                else {
+                    return responseOk(["message" => trans("app.Successful"), "data" => $queryBuilder->paginate()->appends(\request()->get('page'))]);
+                }
+            }
+            else {
+                return responseOk(["message" => trans("app.Successful"), "data" => $queryBuilder->get()]);
+            }
+        }
+        public function store(Request $request) {
+            $data = $request->all();
+            if (method_exists(\Validation::class, "{{ NAMEVARIABLE }}Store")) {
+                $validator = \Validator::make($data, \Validation::{{ NAMEVARIABLE }}Store()["rule"], \Validation::{{ NAMEVARIABLE }}Store()["message"]);
+            }
+            else {
+                $validator = \Validator::make($data, []);
+            }
+            if ($validator->fails()) {
+                return responseUnprocessableEntity(["message" => $validator->errors()->first()]);
+            }
+            else {
+                ${{ NAMEVARIABLE }} = {{ NAMECLASS }}();
+                ${{ NAMEVARIABLE }}->fill($data);
+                ${{ NAMEVARIABLE }}->save();
+                return responseOk(["message" => trans("app.Successful"), "data" => ${{ NAMEVARIABLE }}->toArray()]);
+            }
+        }
+        public function show($id) {
+            ${{ NAMEVARIABLE }} = {{ NAMECLASS }}()->find($id);
+            if (empty(${{ NAMEVARIABLE }})) {
+                return responseNotFound(["message" => trans("app.Not Found"), "data" => []]);
+            }
+            return responseOk(["message" => trans("app.Successful"), "data" => ${{ NAMEVARIABLE }}]);
+        }
+        public function update(Request $request, $id) {
+            $data = $request->all();
+            if (method_exists(\Validation::class, "{{ NAMEVARIABLE }}Update")) {
+                $validator = \Validator::make($data, \Validation::{{ NAMEVARIABLE }}Update($id)["rule"], \Validation::{{ NAMEVARIABLE }}Update($id)["message"]);
+            }
+            else {
+                $validator = \Validator::make($data, []);
+            }
+            if ($validator->fails()) {
+                return responseUnprocessableEntity(["message" => $validator->errors()->first()]);
+            }
+            else {
+                ${{ NAMEVARIABLE }} = {{ NAMECLASS }}()->find($id);
+                if (empty(${{ NAMEVARIABLE }})) {
+                    return responseNotFound(["message" => trans("app.Not Found"), "data" => []]);
+                }
+                ${{ NAMEVARIABLE }}->fill($data);
+                ${{ NAMEVARIABLE }}->save();
+                return responseOk(["message" => trans("app.Successful"), "data" => ${{ NAMEVARIABLE }}->toArray()]);
+            }
+        }
+        public function destroy($id) {
+            ${{ NAMEVARIABLE }} = {{ NAMECLASS }}()->find($id);
+            if (empty(${{ NAMEVARIABLE }})) {
+                return responseNotFound(["message" => trans("app.Not Found"), "data" => []]);
+            }
+            ${{ NAMEVARIABLE }}->delete();
+            return responseOk(["message" => trans("app.Successful"), "data" => ${{ NAMEVARIABLE }}->toArray()]);
+        }
+    }
