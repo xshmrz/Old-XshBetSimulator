@@ -31,9 +31,10 @@
 				</ul>
 			</div>
 			<div class="space-x-1">
-				{{-- <button type="button" class="btn btn-sm btn-link text-white">
-					Root Demo
-				</button> --}}
+				@php
+					$couponUpdate = CouponUpdate()->orderByDesc(id)->first();
+				@endphp
+				{{now()::parse($couponUpdate->created_at)->format("d-m-Y H:i")}}
 			</div>
 		</div>
 	</header>
