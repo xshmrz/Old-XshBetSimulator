@@ -88,6 +88,7 @@
                     }
                 }
             }
+            echo $date."<br>";
         }
         // Eski Bahislerin Durumlarını Güncelleme Fonksiyonu
         function helperUpdateBetStatus() {
