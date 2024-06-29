@@ -32,7 +32,7 @@
 			</div>
 			<div class="space-x-1">
 				@php
-					$couponUpdate = CouponUpdate()->orderByDesc(id)->first();
+					$couponUpdate = CouponUpdate()->where([status_update => EnumProjectStatusUpdate::Success])->orderByDesc(id)->first();
 				@endphp
 				{{now()::parse($couponUpdate->created_at)->format("d-m-Y H:i")}}
 			</div>
