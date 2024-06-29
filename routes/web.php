@@ -128,14 +128,11 @@
             }
         }
         // Bugün Için Bahisleri Çek Ve Işle
+        // Önceki Gün Için Bahisleri Çek Ve Işle
+        helperFetchAndProcessData(now()->subDay());
         helperFetchAndProcessData(now());
         // Bahisleri Güncelle
         helperUpdateBetStatus();
-        // Önceki Gün Için Bahisleri Çek Ve Işle
-        helperFetchAndProcessData(now()->subDay());
-        // Bahisleri Güncelle
-        helperUpdateBetStatus();
-
         echo "dataCheck-Ok<br>";
     }
     Route::get('get', function () {
