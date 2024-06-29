@@ -12,7 +12,7 @@
 
 	<main id="main-container">
 		<div class="bg-body-light border-bottom">
-			<div class="content py-2 text-end">
+			<div class="content py-2 d-flex justify-content-between align-items-center">
                 <?php
                     $totalSpent   = Coupon()->count() * 1000;
                     $totalLost    = Coupon()->where([status => EnumProjectStatus::Lost])->count() * 1000;
@@ -25,17 +25,21 @@
                         $totalPending += $coupon->odd * 1000;
                     endforeach;
                 ?>
-				<div>- {{number_format($totalSpent,2)}} TL</div>
-				<div>+ {{number_format($totalWin,2)}} TL</div>
-				<div>? {{number_format($totalPending,2)}} TL</div>
+				<div>
+					<ul class="nav nav-pills space-x-1 push mb-0">
+						<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Pending == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Pending])}}">Pending</a></li>
+						<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Win == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Win])}}">Win</a></li>
+						<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Lost == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Lost])}}">Lost</a></li>
+					</ul>
+				</div>
+				<div>
+					<div class="text-end">{{number_format($totalSpent,2)}} TL -</div>
+					<div class="text-end">{{number_format($totalWin,2)}} TL +</div>
+					<div class="text-end">{{number_format($totalPending,2)}} TL ?</div>
+				</div>
 			</div>
 		</div>
 		<div class="content content-full">
-			<ul class="nav nav-pills space-x-1 push">
-				<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Pending == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Pending])}}">Pending</a></li>
-				<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Win == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Win])}}">Win</a></li>
-				<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Lost == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Lost])}}">Lost</a></li>
-			</ul>
 			@if($couponData->isEmpty())
 				<div class="alert alert-secondary" role="alert">
                     <p class="mb-0">
