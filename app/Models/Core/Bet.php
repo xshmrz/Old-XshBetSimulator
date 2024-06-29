@@ -52,6 +52,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property string $deleted_at
+ * @property int $finish
+ * @property int $live
  * @package App\Models\Core
  * @method static \Illuminate\Database\Eloquent\Builder|Bet newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bet newQuery()
@@ -68,6 +70,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereEventDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereEventId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereEventName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bet whereFinish($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereIsDeleted($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereIsKingBet($value)
@@ -75,6 +78,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereIsKingMbs($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereIsKingOdd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereIsLive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bet whereLive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereLongEventDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereMarketId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bet whereMarketName($value)
@@ -108,7 +112,9 @@ class Bet extends Model
 
 	protected $casts = [
 		'addedToCoupon' => 'int',
-		'status' => 'int'
+		'status' => 'int',
+		'finish' => 'int',
+		'live' => 'int'
 	];
 
 	protected $fillable = [
@@ -146,6 +152,8 @@ class Bet extends Model
 		'webOdd',
 		'totalPlayed',
 		'totalPlayedRoundStr',
-		'longEventDate'
+		'longEventDate',
+		'finish',
+		'live'
 	];
 }

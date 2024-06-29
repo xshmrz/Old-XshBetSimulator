@@ -122,15 +122,49 @@
             ];
         }
     }
+    class EnumProjectFinish extends EnumBase {
+        const Yes = 1;
+        const No  = 2;
+        protected static function translations() {
+            return [
+                self::Yes => trans("app.Yes"),
+                self::No  => trans("app.No"),
+            ];
+        }
+        protected static function colors() {
+            return [
+                self::Yes => "",
+                self::No  => "",
+            ];
+        }
+    }
+    class EnumProjectLive extends EnumBase {
+        const Yes = 1;
+        const No  = 2;
+        protected static function translations() {
+            return [
+                self::Yes => trans("app.Yes"),
+                self::No  => trans("app.No"),
+            ];
+        }
+        protected static function colors() {
+            return [
+                self::Yes => "",
+                self::No  => "",
+            ];
+        }
+    }
     class EnumProjectStatus extends EnumBase {
         const Pending = 1;
         const Win     = 2;
         const Lost    = 3;
+        const Live    = 4;
         protected static function translations() {
             return [
                 self::Pending => trans("app.Pending"),
                 self::Win     => trans("app.Win"),
                 self::Lost    => trans("app.Lost"),
+                self::Live    => trans("app.Live"),
             ];
         }
         protected static function colors() {
@@ -138,7 +172,11 @@
                 self::Pending => "warning",
                 self::Win     => "success",
                 self::Lost    => "danger",
+                self::Live    => "info",
             ];
         }
     }
+
+
+
 

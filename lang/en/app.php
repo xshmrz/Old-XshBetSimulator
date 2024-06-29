@@ -16,6 +16,7 @@ return array (
   'Pending' => 'Pending',
   'Win' => 'Win',
   'Lost' => 'Lost',
+  'Live' => 'Live',
   'Successful' => 'Successful',
   'User Not Found' => 'User Not Found',
   'Not Found' => 'Not Found',

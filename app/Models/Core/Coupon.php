@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property string $deleted_at
+ * @property int $finish
+ * @property int $live
  * @package App\Models\Core
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newQuery()
@@ -29,7 +31,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereFinish($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereLive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereNo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereOdd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereStatus($value)
@@ -46,13 +50,17 @@ class Coupon extends Model
 
 	protected $casts = [
 		'status' => 'int',
-		'odd' => 'float'
+		'odd' => 'float',
+		'finish' => 'int',
+		'live' => 'int'
 	];
 
 	protected $fillable = [
 		'no',
 		'status',
 		'data',
-		'odd'
+		'odd',
+		'finish',
+		'live'
 	];
 }

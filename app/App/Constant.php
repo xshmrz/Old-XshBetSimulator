@@ -42,6 +42,8 @@ defined('longEventDate') or define('longEventDate', 'longEventDate');
 defined('created_at') or define('created_at', 'created_at');
 defined('updated_at') or define('updated_at', 'updated_at');
 defined('deleted_at') or define('deleted_at', 'deleted_at');
+defined('finish') or define('finish', 'finish');
+defined('live') or define('live', 'live');
 defined('no') or define('no', 'no');
 defined('data') or define('data', 'data');
 defined('migration') or define('migration', 'migration');

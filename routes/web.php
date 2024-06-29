@@ -52,7 +52,7 @@
                 $coupon->save();
             }
         }
-        echo "dataGenerate-Ok<br>";
+
     }
     function dataCheck() {
         // Array Içinde Arama Yapan Yardımcı Fonksiyon
@@ -88,7 +88,7 @@
                     }
                 }
             }
-            echo $date."<br>";
+
         }
         // Eski Bahislerin Durumlarını Güncelleme Fonksiyonu
         function helperUpdateBetStatus() {
@@ -131,14 +131,58 @@
         // Önceki Gün Için Bahisleri Çek Ve Işle
         helperFetchAndProcessData(now());
         helperFetchAndProcessData(now()->subDay());
-
         // Bahisleri Güncelle
         helperUpdateBetStatus();
-        echo "dataCheck-Ok<br>";
+
     }
+    # ->
+    function isBetInProgress($matchStartTimeString) {
+        $now            = now();
+        $matchStartTime = now()::parse($matchStartTimeString);
+        if ($now->lt($matchStartTime)) {
+            return false;
+        }
+        $minutesPassed  = $now->diffInMinutes($matchStartTime);
+        return $minutesPassed >= 0 && $minutesPassed <= 150;
+    }
+    function isBetFinished($matchStartTimeString) {
+        $now            = now();
+        $matchStartTime = now()::parse($matchStartTimeString);
+        if ($now->lt($matchStartTime)) {
+            return false;
+        }
+        $minutesPassed = $now->diffInMinutes($matchStartTime);
+        return $minutesPassed > 150;
+    }
+    # ->
+    function checkBetProgress() {
+        foreach (Bet()->get() as $bet) {
+            if (isBetInProgress($bet->eventDate)) {
+                $bet->live = EnumProjectLive::Yes;
+            }
+            else {
+                $bet->live = EnumProjectLive::No;
+            }
+            $bet->save();
+        }
+    }
+    function checkBetFinished() {
+        foreach (Bet()->get() as $bet) {
+            if (isBetFinished($bet->eventDate)) {
+                $bet->finish = EnumProjectLive::Yes;
+            }
+            else {
+                $bet->finish = EnumProjectLive::No;
+            }
+            $bet->save();
+        }
+    }
+    # ->
     Route::get('get', function () {
-        dataCheck();
         dataGenerate();
+        dataCheck();
+        checkBetProgress();
+        checkBetFinished();
     });
 
 

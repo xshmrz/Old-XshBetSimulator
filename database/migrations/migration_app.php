@@ -24,6 +24,8 @@
                 $table->tinyInteger('addedToCoupon')->nullable()->default(EnumProjectAddedToCoupon::No);
                 $table->string('score')->nullable();
                 $table->tinyInteger('status')->nullable()->default(EnumProjectStatus::Pending);
+                $table->tinyInteger('finish')->nullable()->default(EnumProjectFinish::No);
+                $table->tinyInteger('live')->nullable()->default(EnumProjectLive::No);
                 # ->
                 $table->string('populerBetId')->nullable();
                 $table->string('sportId')->nullable();
@@ -66,7 +68,9 @@
                 $table->string('no')->nullable();
                 $table->tinyInteger('status')->nullable();
                 $table->string('data')->nullable();
-                $table->double('odd',12,2)->nullable();
+                $table->double('odd', 12, 2)->nullable();
+                $table->tinyInteger('finish')->nullable()->default(EnumProjectFinish::No);
+                $table->tinyInteger('live')->nullable()->default(EnumProjectLive::No);
                 $table->timestamps();
                 $table->softDeletes();
             });
