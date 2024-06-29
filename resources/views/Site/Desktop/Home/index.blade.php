@@ -19,7 +19,7 @@
 									@foreach(Bet()->whereIn(marketNo,explode(",",$coupon->data))->orderBy(eventDate,"ASC")->get() as $bet)
 										<li class="list-group-item d-flex justify-content-between align-items-start p-3">
 											<div class="me-auto">
-												<div class="fw-bold">{{Str::limit($bet->eventName,25,"...")}} {{now()->diffInHours(now()::parse($bet->eventDate),false)}}</div>
+												<div class="fw-bold">{{Str::limit($bet->eventName,25,"...")}}</div>
 												<div class="text-muted">{{now()::parse($bet->eventDate)->format("d-m-Y H:i")}}</div>
 											</div>
 											<div class="me-2">
@@ -31,6 +31,14 @@
 												<div><span class="badge rounded bg-primary min-width-50px">{{number_format($bet->odd,2)}}</span></div>
 											</div>
 										</li>
+
+										@if(now()->diffInHours(now()::parse($bet->eventDate),false) < (0 - 2.5) and $bet->status == EnumProjectStatus::Lost)
+											@php
+												$coupon->status = EnumProjectStatus::Lost;
+												$coupon->save();
+											@endphp
+										@endif
+
 									@endforeach
 								</ul>
 							</div>
