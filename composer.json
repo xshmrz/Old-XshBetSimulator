@@ -25,6 +25,7 @@
         "luchavez/boilerplate-generator": "^1.0",
         "luchavez/starter-kit": "^1.2",
         "mcamara/laravel-localization": "^2.0",
+        "mrgswift/laravel-encryptenv": "^1.0",
         "rap2hpoutre/fast-excel": "^5.4",
         "reliese/laravel": "^1.2",
         "spatie/laravel-db-snapshots": "^2.6",

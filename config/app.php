@@ -20,7 +20,7 @@
             Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
             Jenssegers\Agent\AgentServiceProvider::class,
             Barryvdh\Debugbar\ServiceProvider::class,
-
+            mrgswift\EncryptEnv\Provider\EncryptEnvServiceProvider::class,
             # ->
             App\Providers\AppServiceProvider::class,
             App\Providers\AuthServiceProvider::class,
