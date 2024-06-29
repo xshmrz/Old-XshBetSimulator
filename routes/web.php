@@ -119,9 +119,21 @@
                 }
             }
         }
+        # ->
         helperFetchAndProcessData(now());
         helperFetchAndProcessData(now()->subDay());
         helperUpdateBetStatus();
+        # ->
+        foreach (Coupon()->where([status => EnumProjectStatus::Pending])->get() as $coupon) {
+            $statusCoupon = EnumProjectStatus::Pending;
+            foreach (Bet()->whereIn(marketNo, explode(",", $coupon->data))->orderBy(eventDate, "ASC")->get() as $bet) {
+                if ($bet->finish == EnumProjectFinish::Yes and $bet->status == EnumProjectStatus::Lost):
+                    $statusCoupon = EnumProjectStatus::Lost;
+                endif;
+            }
+            $coupon->status = $statusCoupon;
+            $coupon->save();
+        }
     }
     # ->
     function isBetLive($matchStartTimeString) {
