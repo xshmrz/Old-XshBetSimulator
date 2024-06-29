@@ -180,10 +180,10 @@
     # ->
     Route::get('get', function () {
         try {
-            dataGenerate();
-            dataCheck();
             checkBetLive();
             checkBetFinished();
+            dataGenerate();
+            dataCheck();
             $couponUpdate                = CouponUpdate();
             $couponUpdate->status_update = EnumProjectStatusUpdate::Success;
             $couponUpdate->save();
