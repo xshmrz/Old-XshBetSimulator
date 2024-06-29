@@ -82,17 +82,9 @@ php artisan serve
 
 The application should now be running at [http://localhost:8000](http://localhost:8000).
 
-## Usage
-
-Provide instructions and examples for using the project.
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests to us.
-
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License
 
 ## Contact
 
