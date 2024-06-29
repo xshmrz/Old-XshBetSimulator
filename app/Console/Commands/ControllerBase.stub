@@ -1,4 +1,0 @@
-<?php
-    namespace App\Http\Controllers\{{ NAMEMODULESTUDLY }}\Base;
-    class {{ NAMECLASS }} extends \App\Http\Controllers\{{ NAMEMODULESTUDLY }}\Core\{{ NAMECLASS }} {
-    }
