@@ -1,7 +1,25 @@
 @extends("Site.Desktop.layout")
 @section("section-main")
 	<main id="main-container">
-		{{view("Dashboard.Desktop.Component.BaseBreadcrumb")}}
+		<div class="bg-body-light border-bottom">
+			<div class="content py-2 text-end">
+                <?php
+                    $totalSpent   = Coupon()->count() * 1000;
+                    $totalLost    = Coupon()->where([status => EnumProjectStatus::Lost])->count() * 1000;
+                    $totalWin     = 0;
+                    $totalPending = 0;
+                    foreach (Coupon()->where([status => EnumProjectStatus::Win])->get() as $coupon):
+                        $totalWin += $coupon->odd * 1000;
+                    endforeach;
+                    foreach (Coupon()->where([status => EnumProjectStatus::Pending])->get() as $coupon):
+                        $totalPending += $coupon->odd * 1000;
+                    endforeach;
+                ?>
+				<div>- {{number_format($harcanan,2)}} TL</div>
+				<div>+ {{number_format($totalWin,2)}} TL</div>
+				<div>? {{number_format($totalPending,2)}} TL</div>
+			</div>
+		</div>
 		<div class="content content-full">
 			<div class="row">
 				@foreach(Coupon()->orderBy(id,"DESC")->get() as $coupon)
