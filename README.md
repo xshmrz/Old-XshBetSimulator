@@ -12,7 +12,7 @@ test their betting strategies effectively.
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-### Prerequisites
+## Prerequisites
 
 You need to have the following software installed on your system to run this project:
 
@@ -21,7 +21,7 @@ You need to have the following software installed on your system to run this pro
 - SQLite
 - Laravel >= 8.x
 
-### Installation
+## Installation
 
 1. Clone this repository
 
