@@ -8,7 +8,7 @@
 		<div class="sidebar-content">
 			<div class="content-header bg-black-10">
 				<div>
-					<a class="text-white" href="{{route("dashboard.index")}}">{{config("app.name")}}</a>
+					<a class="text-white" href="{{route("site.index")}}">{{config("app.name")}}</a>
 				</div>
 			</div>
 			<div class="js-sidebar-scroll">
