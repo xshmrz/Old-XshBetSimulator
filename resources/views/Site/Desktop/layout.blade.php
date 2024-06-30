@@ -33,7 +33,7 @@
 			</div>
 			<div class="space-x-1">
 				@php
-					$couponLastUpdate = CouponUpdate()->where([status_update => EnumProjectStatusUpdate::Success])->orderByDesc(id)->first();
+					$couponLastUpdate = CouponUpdate()->where([status => EnumProjectStatusUpdate::Success])->orderByDesc(id)->first();
 				@endphp
 				Update : {{now()::parse($couponLastUpdate->created_at)->format("H:i")}}
 			</div>

@@ -74,6 +74,12 @@
                 $table->timestamps();
                 $table->softDeletes();
             });
+            Schema::create('coupon_update', function (Blueprint $table) {
+                $table->id();
+                $table->tinyInteger('status')->nullable()->default(EnumProjectStatusUpdate::Success);
+                $table->timestamps();
+                $table->softDeletes();
+            });
         }
         /**
          * Reverse the migrations.
@@ -82,5 +88,7 @@
         public function down() {
             Schema::dropIfExists('user');
             Schema::dropIfExists('bet');
+            Schema::dropIfExists('coupon');
+            Schema::dropIfExists('coupon_update');
         }
     };

@@ -199,10 +199,10 @@
             dataGenerate();
             dataCheck();
             $couponUpdate                = CouponUpdate();
-            $couponUpdate->status_update = EnumProjectStatusUpdate::Success;
+            $couponUpdate->status = EnumProjectStatusUpdate::Success;
             $couponUpdate->save();
         } catch (\Exception $Ex) {
             $couponUpdate                = CouponUpdate();
-            $couponUpdate->status_update = EnumProjectStatusUpdate::Error;
+            $couponUpdate->status = EnumProjectStatusUpdate::Error;
         }
     });
