@@ -18,11 +18,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $status
  * @property string $data
  * @property float $odd
+ * @property int $finish
+ * @property int $live
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property string $deleted_at
- * @property int $finish
- * @property int $live
  * @package App\Models\Core
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newQuery()

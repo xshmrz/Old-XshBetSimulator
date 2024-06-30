@@ -77,34 +77,6 @@ $elements: (
         DeleteMdlBtn);
 
 @each $element in $elements {
-  .CouponUpdate#{$element} {
-    font-family: inherit;
-  }
-}
-
-$elements: (
-        GetBtn,
-        GetAllBtn,
-        CreateBtn,
-        UpdateBtn,
-        DeleteBtn,
-        GetFrm,
-        GetAllFrm,
-        CreateFrm,
-        UpdateFrm,
-        DeleteFrm,
-        GetMdl,
-        GetAllMdl,
-        CreateMdl,
-        UpdateMdl,
-        DeleteMdl,
-        GetMdlBtn,
-        GetAllMdlBtn,
-        CreateMdlBtn,
-        UpdateMdlBtn,
-        DeleteMdlBtn);
-
-@each $element in $elements {
   .Migration#{$element} {
     font-family: inherit;
   }

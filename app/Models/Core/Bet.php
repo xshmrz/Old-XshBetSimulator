@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $addedToCoupon
  * @property string $score
  * @property int $status
+ * @property int $finish
+ * @property int $live
  * @property string $populerBetId
  * @property string $sportId
  * @property string $eventId
@@ -52,8 +54,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property string $deleted_at
- * @property int $finish
- * @property int $live
  * @package App\Models\Core
  * @method static \Illuminate\Database\Eloquent\Builder|Bet newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bet newQuery()
@@ -121,6 +121,8 @@ class Bet extends Model
 		'addedToCoupon',
 		'score',
 		'status',
+		'finish',
+		'live',
 		'populerBetId',
 		'sportId',
 		'eventId',
@@ -152,8 +154,6 @@ class Bet extends Model
 		'webOdd',
 		'totalPlayed',
 		'totalPlayedRoundStr',
-		'longEventDate',
-		'finish',
-		'live'
+		'longEventDate'
 	];
 }
