@@ -125,19 +125,28 @@
         helperUpdateBetStatus();
         # ->
         foreach (Coupon()->where([status => EnumProjectStatus::Pending])->get() as $coupon) {
-            $statusCoupon = EnumProjectStatus::Pending;
+            $statusCoupon    = EnumProjectStatus::Pending;
             $statusCouponWin = 0;
             foreach (Bet()->whereIn(marketNo, explode(",", $coupon->data))->orderBy(eventDate, "ASC")->get() as $bet) {
                 if ($bet->finish == EnumProjectFinish::Yes and $bet->status == EnumProjectStatus::Lost):
                     $statusCoupon = EnumProjectStatus::Lost;
                 endif;
                 if ($bet->finish == EnumProjectFinish::Yes and $bet->status == EnumProjectStatus::Win):
-                    $statusCouponWin = $statusCouponWin+1;
+                    $statusCouponWin = $statusCouponWin + 1;
                 endif;
             }
-            $coupon->status = $statusCoupon;
-            $coupon->save();
-
+            if ($statusCoupon == EnumProjectStatus::Pending) {
+                $coupon->status = EnumProjectStatus::Pending;
+                $coupon->save();
+            }
+            if ($statusCouponWin == 4) {
+                $coupon->status = EnumProjectStatus::Win;
+                $coupon->save();
+            }
+            if ($statusCoupon == EnumProjectStatus::Lost) {
+                $coupon->status = EnumProjectStatus::Lost;
+                $coupon->save();
+            }
         }
     }
     # ->
