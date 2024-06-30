@@ -32,7 +32,7 @@
                 'table'        => 'jobs',
                 'queue'        => 'default',
                 'retry_after'  => 90,
-                'after_commit' => FALSE,
+                'after_commit' => false,
             ],
             'beanstalkd' => [
                 'driver'       => 'beanstalkd',
@@ -40,7 +40,7 @@
                 'queue'        => 'default',
                 'retry_after'  => 90,
                 'block_for'    => 0,
-                'after_commit' => FALSE,
+                'after_commit' => false,
             ],
             'sqs'        => [
                 'driver'       => 'sqs',
@@ -50,15 +50,15 @@
                 'queue'        => env('SQS_QUEUE', 'default'),
                 'suffix'       => env('SQS_SUFFIX'),
                 'region'       => env('AWS_DEFAULT_REGION', 'us-east-1'),
-                'after_commit' => FALSE,
+                'after_commit' => false,
             ],
             'redis'      => [
                 'driver'       => 'redis',
                 'connection'   => 'default',
                 'queue'        => env('REDIS_QUEUE', 'default'),
                 'retry_after'  => 90,
-                'block_for'    => NULL,
-                'after_commit' => FALSE,
+                'block_for'    => null,
+                'after_commit' => false,
             ],
         ],
         /*

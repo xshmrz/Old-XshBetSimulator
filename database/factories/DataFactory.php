@@ -4,7 +4,7 @@
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Str;
     class DataFactory extends Factory {
-        public function definition(): array {
+        public function definition() : array {
             return [
             ];
         }

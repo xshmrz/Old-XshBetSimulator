@@ -51,8 +51,8 @@
                 $validator = \Validator::make($data, []);
             }
             if ($validator->fails()) {
-               session()->flash('validation', \Str::title($validator->errors()->first()));
-               return redirect()->back()->withInput();
+                session()->flash('validation', \Str::title($validator->errors()->first()));
+                return redirect()->back()->withInput();
             }
             else {
                 $user = User()->find($id);

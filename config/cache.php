@@ -8,13 +8,13 @@
             ],
             'array'     => [
                 'driver'    => 'array',
-                'serialize' => FALSE,
+                'serialize' => false,
             ],
             'database'  => [
                 'driver'          => 'database',
                 'table'           => 'cache',
-                'connection'      => NULL,
-                'lock_connection' => NULL,
+                'connection'      => null,
+                'lock_connection' => null,
             ],
             'file'      => [
                 'driver'    => 'file',
@@ -56,5 +56,5 @@
                 'driver' => 'octane',
             ],
         ],
-        'prefix'  => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_cache_'),
+        'prefix'  => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache_'),
     ];

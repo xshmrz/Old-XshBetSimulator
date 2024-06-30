@@ -7,7 +7,6 @@
             'use'                     => [
                 // Reliese\Database\Eloquent\BitBooleans::class,
                 // Reliese\Database\Eloquent\BlamableBehavior::class,
-
             ],
             'connection'              => false,
             'timestamps'              => true,
@@ -24,7 +23,7 @@
             'guarded'                 => [
             ],
             'casts'                   => [
-                '*_json'   => 'json',
+                '*_json' => 'json',
             ],
             'except'                  => [
                 'failed_jobs',

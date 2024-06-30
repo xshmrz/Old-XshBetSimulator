@@ -198,11 +198,11 @@
             checkBetFinished();
             dataGenerate();
             dataCheck();
-            $couponUpdate                = CouponUpdate();
+            $couponUpdate         = CouponUpdate();
             $couponUpdate->status = EnumProjectStatusUpdate::Success;
             $couponUpdate->save();
         } catch (\Exception $Ex) {
-            $couponUpdate                = CouponUpdate();
+            $couponUpdate         = CouponUpdate();
             $couponUpdate->status = EnumProjectStatusUpdate::Error;
         }
     });

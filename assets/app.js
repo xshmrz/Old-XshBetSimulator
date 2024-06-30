@@ -52,8 +52,7 @@ XSH.ROUTEREFRESH  = function (timeout) {
 XSH.INITUSERAGENT = function () {
     return 'ontouchstart' in document.documentElement;
 };
-
-XSH.INITBASE      = function () {
+XSH.INITBASE = function () {
     $form = jQuery('form:not(.text-editor)');
     $form.on('keyup keypress', function (e) {
         var keyCode = e.keyCode || e.which;
@@ -195,7 +194,6 @@ const Authorize = {
                        callBackSuccess(response);
                    },
                    error  : function (response) {
-
                        if (typeof callBackError === 'function') {
                            callBackError();
                        }

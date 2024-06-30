@@ -25,7 +25,7 @@
         */
         'bcrypt' => [
             'rounds' => env('BCRYPT_ROUNDS', 12),
-            'verify' => TRUE,
+            'verify' => true,
         ],
         /*
         |--------------------------------------------------------------------------
@@ -41,6 +41,6 @@
             'memory'  => 65536,
             'threads' => 1,
             'time'    => 4,
-            'verify'  => TRUE,
+            'verify'  => true,
         ],
     ];

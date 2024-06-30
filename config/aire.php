@@ -1,11 +1,11 @@
 <?php
     return [
-        'group_by_default'             => TRUE,
-        'auto_id'                      => FALSE,
-        'verbose_summaries_by_default' => FALSE,
-        'validate_by_default'          => FALSE,
-        'inline_validation'            => FALSE,
-        'validation_script_path'       => env('APP_URL') . '/vendor/aire/js/aire.js',
+        'group_by_default'             => true,
+        'auto_id'                      => false,
+        'verbose_summaries_by_default' => false,
+        'validate_by_default'          => false,
+        'inline_validation'            => false,
+        'validation_script_path'       => env('APP_URL').'/vendor/aire/js/aire.js',
         'default_attributes'           => [
             'form' => [
                 'method' => 'POST',

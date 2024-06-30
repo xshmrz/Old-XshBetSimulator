@@ -5,7 +5,7 @@
         | API Routes
         |--------------------------------------------------------------------------
         */
-        'use_package_routes' => TRUE,
+        'use_package_routes' => true,
         'middlewares'        => [],
         'prefix'             => 'laraberg',
         /*
@@ -17,7 +17,7 @@
             'maxwidth'  => 1200,
             'maxheight' => 1200,
             'cache'     => [
-                'enabled'  => FALSE,
+                'enabled'  => false,
                 'duration' => 86400,
             ],
         ],

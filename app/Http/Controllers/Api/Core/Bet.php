@@ -5,9 +5,9 @@
     use Bjerke\ApiQueryBuilder\QueryBuilder as QueryBuilder;
     class Bet extends Controller {
         public function index() {
-            $model          = Bet();
-            $queryBuilder   = new QueryBuilder($model, \request());
-            $queryBuilder   = $queryBuilder->build();
+            $model        = Bet();
+            $queryBuilder = new QueryBuilder($model, \request());
+            $queryBuilder = $queryBuilder->build();
             if (\request()->has("pagination") && \request()->get("pagination") == "true") {
                 if (\request()->has("per_page")) {
                     return responseOk(["message" => trans("app.Successful"), "data" => $queryBuilder->paginate(\request()->get("per_page"))->appends(\request()->except('page'))]);

@@ -26,7 +26,7 @@
         |
         */
         'lifetime'        => env('SESSION_LIFETIME', 120),
-        'expire_on_close' => FALSE,
+        'expire_on_close' => false,
         /*
         |--------------------------------------------------------------------------
         | Session Encryption
@@ -37,7 +37,7 @@
         | automatically by Laravel and you can use the Session like normal.
         |
         */
-        'encrypt'         => FALSE,
+        'encrypt'         => false,
         /*
         |--------------------------------------------------------------------------
         | Session File Location
@@ -107,7 +107,7 @@
         */
         'cookie'          => env(
             'SESSION_COOKIE',
-            Str::slug(env('APP_NAME', 'laravel'), '_') . '_session'
+            Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
         ),
         /*
         |--------------------------------------------------------------------------
@@ -152,7 +152,7 @@
         | the HTTP protocol. You are free to modify this option if needed.
         |
         */
-        'http_only'       => TRUE,
+        'http_only'       => true,
         /*
         |--------------------------------------------------------------------------
         | Same-Site Cookies
@@ -176,5 +176,5 @@
         | when flagged "secure" and the Same-Site attribute is set to "none".
         |
         */
-        'partitioned'     => FALSE,
+        'partitioned'     => false,
     ];

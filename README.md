@@ -76,12 +76,10 @@ php artisan migrate
 php artisan serve
 ```
 
-The application should now be running at [http://localhost:8000](http://localhost:8000).
-
 ## License
 
 This project is licensed under the MIT License
 
 ## Contact
 
-For questions about this project, please contact: [xshmrz@gmail.com](mailto:xshmrz@gmail.com)
+For questions about this project : [xshmrz@gmail.com](mailto:xshmrz@gmail.com)

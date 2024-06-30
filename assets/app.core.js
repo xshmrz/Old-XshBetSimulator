@@ -28,7 +28,7 @@ const Bet = {
                        callBackSuccess(response);
                    },
                    error  : function (response) {
-                      callBackError(response);
+                       callBackError(response);
                    }
                });
     },
@@ -49,7 +49,6 @@ const Bet = {
         this.makeRequest('DELETE', 'api/bet/' + id, null, callBackSuccess, callBackError);
     }
 };
-
 const Coupon = {
     GetBtn      : jQuery('.CouponGetBtn'),
     GetAllBtn   : jQuery('.CouponGetAllBtn'),
@@ -80,7 +79,7 @@ const Coupon = {
                        callBackSuccess(response);
                    },
                    error  : function (response) {
-                      callBackError(response);
+                       callBackError(response);
                    }
                });
     },
@@ -101,7 +100,6 @@ const Coupon = {
         this.makeRequest('DELETE', 'api/coupon/' + id, null, callBackSuccess, callBackError);
     }
 };
-
 const CouponUpdate = {
     GetBtn      : jQuery('.CouponUpdateGetBtn'),
     GetAllBtn   : jQuery('.CouponUpdateGetAllBtn'),
@@ -132,7 +130,7 @@ const CouponUpdate = {
                        callBackSuccess(response);
                    },
                    error  : function (response) {
-                      callBackError(response);
+                       callBackError(response);
                    }
                });
     },
@@ -153,7 +151,6 @@ const CouponUpdate = {
         this.makeRequest('DELETE', 'api/coupon-update/' + id, null, callBackSuccess, callBackError);
     }
 };
-
 const Migration = {
     GetBtn      : jQuery('.MigrationGetBtn'),
     GetAllBtn   : jQuery('.MigrationGetAllBtn'),
@@ -184,7 +181,7 @@ const Migration = {
                        callBackSuccess(response);
                    },
                    error  : function (response) {
-                      callBackError(response);
+                       callBackError(response);
                    }
                });
     },
@@ -205,7 +202,6 @@ const Migration = {
         this.makeRequest('DELETE', 'api/migration/' + id, null, callBackSuccess, callBackError);
     }
 };
-
 const User = {
     GetBtn      : jQuery('.UserGetBtn'),
     GetAllBtn   : jQuery('.UserGetAllBtn'),
@@ -236,7 +232,7 @@ const User = {
                        callBackSuccess(response);
                    },
                    error  : function (response) {
-                      callBackError(response);
+                       callBackError(response);
                    }
                });
     },
