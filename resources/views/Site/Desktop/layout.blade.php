@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="{{config("app.locale")}}">
 {{view("Dashboard.Desktop.Component.BaseAssetsHeader")}}
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="xshmrz" data-description="Support me on Buy me a coffee!" data-message="" data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 <body class="">
 <div id="page-container" class="sidebar-dark side-scroll page-header-fixed page-header-dark main-content-custom">
 	<div id="page-loader" class="show"></div>
@@ -42,9 +43,6 @@
 	<footer id="page-footer" class="bg-body-light border-top">
 		<div class="content py-3">
 			<div class="row fs-sm">
-				<div class="col-sm-6 order-sm-2 py-1 text-center text-sm-end">
-					<a class="fw-semibold" href="javascript:void(0)">xshmrz</a>
-				</div>
 				<div class="col-sm-6 order-sm-1 py-1 text-center text-sm-start">
 					<a class="fw-semibold" href="javascript:void(0)">{{config("app.name")}}</a> &copy;
 					<span data-toggle="year-copy"></span>
