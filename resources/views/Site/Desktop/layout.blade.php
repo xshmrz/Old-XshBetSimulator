@@ -36,7 +36,7 @@
 					$lastUpdate = CouponUpdate()->where([status => EnumProjectStatusUpdate::Success])->orderByDesc(id)->first();
 				@endphp
 				@if(!empty($lastUpdate))
-					Update : {{now()::parse($lastUpdate->created_at)->format("H:i")}}
+					U : {{now()::parse($lastUpdate->created_at)->format("H:i")}}
 				@endif
 			</div>
 		</div>
