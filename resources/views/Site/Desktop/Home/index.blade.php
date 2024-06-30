@@ -33,9 +33,9 @@
 					</ul>
 				</div>
 				<div>
-					<div class="text-end">{{number_format($totalSpent,2)}} TL -</div>
-					<div class="text-end">{{number_format($totalWin,2)}} TL +</div>
-					<div class="text-end">{{number_format($totalPending,2)}} TL ?</div>
+					<div class="text-end fw-bold text-danger">{{number_format($totalSpent,2)}} TL -</div>
+					<div class="text-end fw-bold text-success">{{number_format($totalWin,2)}} TL +</div>
+					<div class="text-end fw-bold text-warning">{{number_format($totalPending,2)}} TL ?</div>
 				</div>
 			</div>
 		</div>
