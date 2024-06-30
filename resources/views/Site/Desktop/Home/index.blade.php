@@ -31,9 +31,9 @@
                 ?>
 				<div>
 					<ul class="nav nav-pills space-x-1 push mb-0">
-						<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Pending == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Pending])}}">Pending ({{$countPending}})</a></li>
-						<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Win == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Win])}}">Win ({{$countWin}})</a></li>
-						<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Lost == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Lost])}}">Lost ({{$countLost}})</a></li>
+						<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Pending == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Pending])}}">Pending</a></li>
+						<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Win == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Win])}}">Win</a></li>
+						<li class="nav-item"><a class="nav-link {{EnumProjectStatus::Lost == $status ? "active" : null}}" href="{{request()->fullUrlWithQuery([status => EnumProjectStatus::Lost])}}">Lost</a></li>
 					</ul>
 				</div>
 				<div>
