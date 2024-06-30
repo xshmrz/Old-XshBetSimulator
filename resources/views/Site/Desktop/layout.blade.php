@@ -35,7 +35,9 @@
 				@php
 					$couponLastUpdate = CouponUpdate()->where([status => EnumProjectStatusUpdate::Success])->orderByDesc(id)->first();
 				@endphp
-				Update : {{now()::parse($couponLastUpdate->created_at)->format("H:i")}}
+				@if(!empty($couponLastUpdate))
+					Update : {{now()::parse($couponLastUpdate->created_at)->format("H:i")}}
+				@endif
 			</div>
 		</div>
 	</header>
