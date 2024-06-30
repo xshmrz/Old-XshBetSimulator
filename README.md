@@ -1,11 +1,15 @@
-## Xsh-Bet-Simulator
+## xsh-Bet-Simulator
 
 ## Project Overview
 
-**Xsh Bet Simulator** is an innovative application designed to fetch match data from an API, generate betting slips with
+**xsh Bet Simulator** is an innovative application designed to fetch match data from an API, generate betting slips with
 4 matches each, and simulate the betting process by wagering 1000 TL on each slip. The application calculates and
 displays potential profit or loss, providing users with valuable insights into the betting world and allowing them to
 test their betting strategies effectively.
+
+
+![xsh-Bet-Simulator](image-xsh-Bet-Simulator.png)
+
 
 ## Getting Started
 
