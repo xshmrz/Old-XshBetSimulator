@@ -1,5 +1,4 @@
-
-# Xsh-Bet-Simulator
+## Xsh-Bet-Simulator
 
 ## Project Overview
 
