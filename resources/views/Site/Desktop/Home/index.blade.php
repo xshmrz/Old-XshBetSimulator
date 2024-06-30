@@ -56,7 +56,7 @@
 						<div class="col-md-12">
 							<div class="block block-rounded shadow">
 								<div class="block-header block-header-default p-3 bg-body-dark">
-									<h3 class="block-title">{{$coupon->no}}</h3>
+									<h3 class="block-title">{{now()::parse($coupon->created_at)->format("d-m H:i")}}</h3>
 									<div>
 										<span class="badge rounded bg-{{EnumProjectStatus::getColor($coupon->status)}} text-uppercase text-end min-width-100px">{{number_format($coupon->odd * 1000),2}} TL</span>
 										<span class="badge rounded bg-primary text-uppercase min-width-50px">{{number_format($coupon->odd,2)}}</span>
