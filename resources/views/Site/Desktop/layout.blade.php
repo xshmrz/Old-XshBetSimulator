@@ -23,7 +23,7 @@
 	<header id="page-header">
 		<div class="content-header">
 			<div class="space-x-1">
-				<a class="text-white" href="{{route("dashboard.index")}}">{{config("app.name")}}</a>
+				<a class="text-white" href="{{route("site.index")}}">{{config("app.name")}}</a>
 			</div>
 			<div class="d-none d-lg-block">
 				<ul class="nav-main nav-main-horizontal nav-main-hover">
