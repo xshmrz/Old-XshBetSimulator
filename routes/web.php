@@ -138,10 +138,6 @@
             $coupon->status = $statusCoupon;
             $coupon->save();
 
-            if($statusCouponWin == 4){
-                $coupon->status = EnumProjectStatus::Win;
-                $coupon->save();
-            }
         }
     }
     # ->
